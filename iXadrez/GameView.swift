@@ -11,7 +11,7 @@ struct GameView: View {
                 playerTag(color: .black)
 
                 ChessBoardView(
-                    board: vm.game.board,
+                    pieces: vm.pieces,
                     selected: vm.selected,
                     legalTargets: vm.legalTargets,
                     lastMove: vm.lastMove,
@@ -25,6 +25,12 @@ struct GameView: View {
 
                 statusCard
                 historyCard
+
+                if vm.mode == .bot {
+                    Button(loc.t("undoMove")) { vm.undoLastTurn() }
+                        .buttonStyle(GhostButtonStyle())
+                        .disabled(vm.thinking || vm.game.history.isEmpty)
+                }
 
                 HStack(spacing: 10) {
                     Button(loc.t("flipBoard")) { vm.flipBoard() }.buttonStyle(GhostButtonStyle())

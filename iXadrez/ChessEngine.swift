@@ -473,4 +473,23 @@ final class ChessGame {
             return GameStatus(over: false, key: "playing", winner: nil)
         }
     }
+
+    /// Rebuilds state by replaying the history minus the last `n` plies.
+    func undoPlies(_ n: Int) {
+        let keep = history.prefix(max(0, history.count - n))
+        let fresh = ChessGame()
+        for record in keep {
+            fresh.makeMove(from: record.from, to: record.to, promotion: record.promotion)
+        }
+        board = fresh.board
+        turn = fresh.turn
+        castling = fresh.castling
+        enPassant = fresh.enPassant
+        halfmoveClock = fresh.halfmoveClock
+        fullmoveNumber = fresh.fullmoveNumber
+        history = fresh.history
+        positionCounts = fresh.positionCounts
+        result = fresh.result
+        winner = fresh.winner
+    }
 }

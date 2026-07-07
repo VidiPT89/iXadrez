@@ -99,7 +99,7 @@ struct TutorialView: View {
                 .background(RoundedRectangle(cornerRadius: 16).fill(Theme.panel).overlay(RoundedRectangle(cornerRadius: 16).stroke(Theme.panelBorder, lineWidth: 1)))
 
                 ChessBoardView(
-                    board: game.board,
+                    pieces: PieceInstance.fresh(from: game.board),
                     selected: selected,
                     legalTargets: legalTargets,
                     onTap: tap
