@@ -27,9 +27,14 @@ struct GameView: View {
                 historyCard
 
                 if vm.mode == .bot {
-                    Button(loc.t("undoMove")) { vm.undoLastTurn() }
-                        .buttonStyle(GhostButtonStyle())
-                        .disabled(vm.thinking || vm.game.history.isEmpty)
+                    HStack(spacing: 10) {
+                        Button(loc.t("undoMove")) { vm.undoLastTurn() }
+                            .buttonStyle(GhostButtonStyle())
+                            .disabled(vm.thinking || vm.game.history.isEmpty)
+                        Button(loc.t("redoMove")) { vm.redoLastTurn() }
+                            .buttonStyle(GhostButtonStyle())
+                            .disabled(vm.thinking || !vm.canRedo)
+                    }
                 }
 
                 HStack(spacing: 10) {

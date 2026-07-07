@@ -21,8 +21,10 @@ final class GameViewModel: ObservableObject {
     @Published private(set) var thinking: Bool = false
     @Published var promotionCandidates: [Move]? = nil
     @Published var showResult: Bool = false
+    @Published private(set) var canRedo: Bool = false
 
     private var requestToken = UUID()
+    private var redoStack: [[MoveRecord]] = []
 
     func newGame(mode: GameMode, level: BotDifficulty = .medium) {
         self.mode = mode
@@ -36,6 +38,8 @@ final class GameViewModel: ObservableObject {
         thinking = false
         promotionCandidates = nil
         showResult = false
+        redoStack = []
+        canRedo = false
     }
 
     var statusText: (over: Bool, key: String, winner: PieceColor?) {
@@ -83,6 +87,8 @@ final class GameViewModel: ObservableObject {
         selected = nil
         legalTargets = []
         lastMove = (move.from, move.to)
+        redoStack = []
+        canRedo = false
 
         withAnimation(.easeInOut(duration: 0.38)) {
             applyMoveToPieces(move)
@@ -158,6 +164,9 @@ final class GameViewModel: ObservableObject {
     func undoLastTurn() {
         guard mode == .bot, !thinking, !game.history.isEmpty else { return }
         let removeCount = game.history.count % 2 == 0 ? 2 : 1
+        let removed = Array(game.history.suffix(removeCount))
+        redoStack.append(removed)
+        canRedo = true
         requestToken = UUID()
         game.undoPlies(removeCount)
         pieces = PieceInstance.fresh(from: game.board)
@@ -165,6 +174,17 @@ final class GameViewModel: ObservableObject {
         legalTargets = []
         lastMove = nil
         showResult = false
+        SoundEngine.shared.playClick()
+    }
+
+    func redoLastTurn() {
+        guard mode == .bot, !thinking, let batch = redoStack.popLast() else { return }
+        for record in batch {
+            game.makeMove(from: record.from, to: record.to, promotion: record.promotion)
+        }
+        canRedo = !redoStack.isEmpty
+        pieces = PieceInstance.fresh(from: game.board)
+        if let last = batch.last { lastMove = (last.from, last.to) }
         SoundEngine.shared.playClick()
     }
 
