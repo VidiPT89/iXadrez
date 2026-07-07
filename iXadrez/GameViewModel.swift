@@ -84,7 +84,7 @@ final class GameViewModel: ObservableObject {
         legalTargets = []
         lastMove = (move.from, move.to)
 
-        withAnimation(.easeInOut(duration: 0.18)) {
+        withAnimation(.easeInOut(duration: 0.38)) {
             applyMoveToPieces(move)
         }
 
@@ -131,14 +131,21 @@ final class GameViewModel: ObservableObject {
         pieces = updated
     }
 
+    /// So the bot always feels like it "thought" for a moment, even at Beginner/Easy where
+    /// the search itself finishes almost instantly.
+    private static let botMinDelay: TimeInterval = 0.55
+
     private func requestBotMove() {
         thinking = true
         let token = requestToken
         let snapshot = game.clone()
         let level = botLevel
+        let startedAt = Date()
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             let move = ChessAI.pickMove(game: snapshot, difficulty: level)
-            DispatchQueue.main.async {
+            let elapsed = Date().timeIntervalSince(startedAt)
+            let wait = max(0, Self.botMinDelay - elapsed)
+            DispatchQueue.main.asyncAfter(deadline: .now() + wait) {
                 guard let self, self.requestToken == token else { return }
                 self.thinking = false
                 if let move {
