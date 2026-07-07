@@ -60,8 +60,8 @@ struct ContentView: View {
     private var header: some View {
         HStack {
             HStack(spacing: 8) {
-                Text("♚").font(.system(size: 22)).foregroundColor(Theme.gold)
-                Text("Xadrez").font(.system(size: 20, weight: .bold, design: .serif))
+                Text("♚").font(Theme.sora(22)).foregroundColor(Theme.gold)
+                Text("Xadrez").font(Theme.soraExtraBold(20))
             }
             Spacer()
             Button {
@@ -77,7 +77,7 @@ struct ContentView: View {
             } label: {
                 HStack(spacing: 4) {
                     Text(loc.language == .pt ? "🇵🇹" : "🇬🇧")
-                    Text(loc.language.rawValue.uppercased()).font(.system(size: 13, weight: .bold))
+                    Text(loc.language.rawValue.uppercased()).font(Theme.sora(13, weight: .bold))
                 }
                 .padding(.horizontal, 12).padding(.vertical, 8)
                 .background(Capsule().fill(Theme.panel).overlay(Capsule().stroke(Theme.panelBorder, lineWidth: 1)))
@@ -94,13 +94,13 @@ struct ContentView: View {
                 Text(loc.t("footerBy")).foregroundColor(Theme.inkDim)
                 Text("David Arsénio Martins").fontWeight(.bold).foregroundColor(Theme.goldSoft)
             }
-            .font(.system(size: 12))
+            .font(Theme.sora(12))
             HStack(spacing: 8) {
                 Link("ividi.dev", destination: URL(string: "https://ividi.dev/")!)
                 Text("·").foregroundColor(Theme.inkDim)
                 Link("GitHub", destination: URL(string: "https://github.com/VidiPT89/iXadrez")!)
             }
-            .font(.system(size: 12))
+            .font(Theme.sora(12))
             .foregroundColor(Theme.inkDim)
         }
         .padding(.vertical, 10)

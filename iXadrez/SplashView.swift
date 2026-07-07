@@ -12,12 +12,12 @@ struct SplashView: View {
             Color.black.opacity(0.82).ignoresSafeArea()
 
             VStack(spacing: 14) {
-                Text("♚").font(.system(size: 46)).foregroundColor(Theme.gold)
+                Text("♚").font(Theme.sora(46)).foregroundColor(Theme.gold)
                 Text(loc.t("introTitle"))
-                    .font(.system(size: 28, weight: .bold, design: .serif))
+                    .font(Theme.soraExtraBold(28))
                     .foregroundColor(Theme.goldSoft)
                 Text(loc.t("introText"))
-                    .font(.system(size: 14))
+                    .font(Theme.sora(14))
                     .foregroundColor(Theme.inkDim)
                     .multilineTextAlignment(.center)
 
@@ -26,14 +26,14 @@ struct SplashView: View {
                         Text(loc.t("footerBy")).foregroundColor(Theme.ink)
                         Text("David Arsénio Martins").fontWeight(.bold).foregroundColor(Theme.ink)
                     }
-                    .font(.system(size: 14))
+                    .font(Theme.sora(14))
 
                     HStack(spacing: 8) {
                         Link("ividi.dev", destination: URL(string: "https://ividi.dev/")!)
                         Text("·").foregroundColor(Theme.inkDim)
                         Link("GitHub", destination: URL(string: "https://github.com/VidiPT89/iXadrez")!)
                     }
-                    .font(.system(size: 13))
+                    .font(Theme.sora(13))
                     .foregroundColor(Theme.goldSoft)
                 }
                 .padding(.top, 8)

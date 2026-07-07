@@ -49,7 +49,7 @@ struct GameView: View {
     private func playerTag(color: PieceColor) -> some View {
         let active = vm.game.turn == color && !vm.statusText.over
         return Text(color == .white ? loc.t("whitePlayer") : loc.t("blackPlayer"))
-            .font(.system(size: 14, weight: .semibold))
+            .font(Theme.sora(14, weight: .semibold))
             .padding(.horizontal, 16).padding(.vertical, 6)
             .background(Capsule().fill(Theme.panel).overlay(Capsule().stroke(active ? Theme.gold : Theme.panelBorder, lineWidth: 1)))
             .foregroundColor(active ? Theme.goldSoft : Theme.ink)
@@ -58,11 +58,11 @@ struct GameView: View {
     private var statusCard: some View {
         VStack(spacing: 4) {
             Text(vm.game.turn == .white ? loc.t("turnWhite") : loc.t("turnBlack"))
-                .font(.system(size: 17, weight: .bold))
+                .font(Theme.sora(17, weight: .bold))
                 .foregroundColor(Theme.ink)
             let note: String = vm.thinking ? loc.t("thinking") : (vm.statusText.key == "check" ? loc.t("inCheck") : "")
             if !note.isEmpty {
-                Text(note).font(.system(size: 14)).foregroundColor(Theme.goldSoft)
+                Text(note).font(Theme.sora(14)).foregroundColor(Theme.goldSoft)
             }
         }
         .frame(maxWidth: .infinity)
@@ -72,7 +72,7 @@ struct GameView: View {
 
     private var historyCard: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(loc.t("moveHistory")).font(.system(size: 12, weight: .bold)).foregroundColor(Theme.inkDim).textCase(.uppercase)
+            Text(loc.t("moveHistory")).font(Theme.sora(12, weight: .bold)).foregroundColor(Theme.inkDim).textCase(.uppercase)
             let history = vm.game.history
             ScrollView {
                 VStack(alignment: .leading, spacing: 4) {
@@ -110,9 +110,13 @@ struct GameView: View {
                     Button {
                         vm.choosePromotion(type)
                     } label: {
-                        Text(["q": "♛", "r": "♜", "b": "♝", "n": "♞"][type.rawValue] ?? "")
-                            .font(.system(size: 40))
-                            .foregroundColor(vm.game.turn == .white ? .white : .black)
+                        Image(pieceImageName[type] ?? "piece_q")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundStyle(vm.game.turn == .white ? whitePieceGradient : blackPieceGradient)
+                            .shadow(color: .black.opacity(0.5), radius: 1.5, x: 0, y: 2)
+                            .padding(12)
                             .frame(width: 64, height: 64)
                             .background(RoundedRectangle(cornerRadius: 12).fill(Theme.bgSoft).overlay(RoundedRectangle(cornerRadius: 12).stroke(Theme.panelBorder, lineWidth: 1)))
                     }
@@ -145,9 +149,9 @@ struct GameView: View {
         }
 
         return VStack(spacing: 16) {
-            Text(icon).font(.system(size: 44))
-            Text(title).font(.system(size: 22, weight: .bold)).foregroundColor(Theme.goldSoft)
-            Text(text).font(.system(size: 15)).foregroundColor(Theme.inkDim).multilineTextAlignment(.center)
+            Text(icon).font(Theme.sora(44))
+            Text(title).font(Theme.sora(22, weight: .bold)).foregroundColor(Theme.goldSoft)
+            Text(text).font(Theme.sora(15)).foregroundColor(Theme.inkDim).multilineTextAlignment(.center)
             HStack(spacing: 10) {
                 Button(loc.t("newGame")) { vm.showResult = false; vm.newGame(mode: vm.mode, level: vm.botLevel) }.buttonStyle(GhostButtonStyle())
                 Button(loc.t("backToMenu")) { vm.showResult = false; onBackToMenu() }.buttonStyle(GhostButtonStyle())

@@ -20,6 +20,13 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Sora-Regular.ttf</string>
+		<string>Sora-SemiBold.ttf</string>
+		<string>Sora-Bold.ttf</string>
+		<string>Sora-ExtraBold.ttf</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UIRequiresFullScreen</key>

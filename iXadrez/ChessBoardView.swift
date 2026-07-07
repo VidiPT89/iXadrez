@@ -1,8 +1,18 @@
 import SwiftUI
 
-private let pieceGlyph: [PieceType: String] = [
-    .king: "♚", .queen: "♛", .rook: "♜", .bishop: "♝", .knight: "♞", .pawn: "♟",
+let pieceImageName: [PieceType: String] = [
+    .king: "piece_k", .queen: "piece_q", .rook: "piece_r",
+    .bishop: "piece_b", .knight: "piece_n", .pawn: "piece_p",
 ]
+
+let whitePieceGradient = LinearGradient(
+    colors: [Color(red: 0.992, green: 0.976, blue: 0.933), Color(red: 0.914, green: 0.788, blue: 0.416)],
+    startPoint: .top, endPoint: .bottom
+)
+let blackPieceGradient = LinearGradient(
+    colors: [Color(red: 0.227, green: 0.188, blue: 0.125), Color(red: 0.051, green: 0.043, blue: 0.024)],
+    startPoint: .top, endPoint: .bottom
+)
 
 /// Reusable 8x8 board renderer, shared by the main game screen and the tutorial lessons.
 struct ChessBoardView: View {
@@ -14,9 +24,7 @@ struct ChessBoardView: View {
     var flipped: Bool = false
     var onTap: (Square) -> Void = { _ in }
 
-    private let goldColor = Color(red: 0.83, green: 0.69, blue: 0.22)
-    private let squareLight = Color(red: 0.93, green: 0.87, blue: 0.77)
-    private let squareDark = Color(red: 0.42, green: 0.29, blue: 0.20)
+    private let goldColor = Theme.gold
 
     private func displayCoord(_ r: Int, _ c: Int) -> (Int, Int) {
         flipped ? (7 - r, 7 - c) : (r, c)
@@ -58,26 +66,32 @@ struct ChessBoardView: View {
         let target = legalTargets.first { $0.to == sq }
 
         ZStack {
-            (isLight ? squareLight : squareDark)
+            LinearGradient(
+                colors: isLight ? [Theme.squareLight, Theme.squareLight2] : [Theme.squareDark, Theme.squareDark2],
+                startPoint: .topLeading, endPoint: .bottomTrailing
+            )
 
             if isSelected {
                 Rectangle().stroke(goldColor, lineWidth: 4)
             } else if isCheck {
-                Rectangle().stroke(Color(red: 0.75, green: 0.31, blue: 0.25), lineWidth: 4)
+                Rectangle().stroke(Theme.danger, lineWidth: 4)
             } else if isLast {
                 Rectangle().stroke(goldColor.opacity(0.5), lineWidth: 4)
             }
 
             if let piece {
-                Text(pieceGlyph[piece.type] ?? "")
-                    .font(.system(size: cellSize * 0.68))
-                    .foregroundColor(piece.color == .white ? Color(white: 0.98) : Color(white: 0.08))
-                    .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
+                Image(pieceImageName[piece.type] ?? "piece_p")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundStyle(piece.color == .white ? whitePieceGradient : blackPieceGradient)
+                    .shadow(color: .black.opacity(0.55), radius: 1.5, x: 0, y: 2)
+                    .padding(cellSize * 0.13)
             }
 
             if let target {
                 if target.capture {
-                    Circle().stroke(Color(red: 0.75, green: 0.31, blue: 0.25), lineWidth: 4).padding(cellSize * 0.08)
+                    Circle().stroke(Theme.danger, lineWidth: 4).padding(cellSize * 0.08)
                 } else {
                     Circle().fill(goldColor.opacity(0.55)).frame(width: cellSize * 0.26, height: cellSize * 0.26)
                 }

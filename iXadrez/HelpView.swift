@@ -38,16 +38,16 @@ struct HelpView: View {
         ScrollView {
             VStack(spacing: 16) {
                 Text(loc.t("helpTitle"))
-                    .font(.system(size: 28, weight: .bold, design: .serif))
+                    .font(Theme.soraExtraBold(28))
                     .foregroundColor(Theme.goldSoft)
 
                 ForEach(0..<helpBlocks.count, id: \.self) { i in
                     VStack(alignment: .leading, spacing: 6) {
                         Text(helpBlocks[i].title(loc.language))
-                            .font(.system(size: 16, weight: .bold))
+                            .font(Theme.sora(16, weight: .bold))
                             .foregroundColor(Theme.goldSoft)
                         Text(helpBlocks[i].body(loc.language))
-                            .font(.system(size: 14))
+                            .font(Theme.sora(14))
                             .foregroundColor(Theme.inkDim)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)

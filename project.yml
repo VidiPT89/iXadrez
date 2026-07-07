@@ -27,6 +27,11 @@ targets:
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
         CFBundleDisplayName: "Xadrez"
+        UIAppFonts:
+          - Sora-Regular.ttf
+          - Sora-SemiBold.ttf
+          - Sora-Bold.ttf
+          - Sora-ExtraBold.ttf
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.vidi.iXadrez

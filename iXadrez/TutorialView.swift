@@ -78,7 +78,7 @@ struct TutorialView: View {
                             select(i)
                         } label: {
                             Text("\(i + 1)")
-                                .font(.system(size: 14, weight: .bold))
+                                .font(Theme.sora(14, weight: .bold))
                                 .frame(width: 32, height: 32)
                                 .background(Circle().fill(i == index ? Theme.gold : Theme.panel).overlay(Circle().stroke(Theme.panelBorder, lineWidth: 1)))
                                 .foregroundColor(i == index ? Theme.bg : Theme.ink)
@@ -88,10 +88,10 @@ struct TutorialView: View {
 
                 VStack(alignment: .leading, spacing: 10) {
                     Text(lessons[index].title(loc.language))
-                        .font(.system(size: 20, weight: .bold, design: .serif))
+                        .font(Theme.soraExtraBold(20))
                         .foregroundColor(Theme.goldSoft)
                     Text(lessons[index].text(loc.language))
-                        .font(.system(size: 14))
+                        .font(Theme.sora(14))
                         .foregroundColor(Theme.inkDim)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -106,7 +106,7 @@ struct TutorialView: View {
                 )
                 .frame(width: 320, height: 320)
 
-                Text(loc.t("lessonHintClick")).font(.system(size: 13)).foregroundColor(Theme.goldSoft)
+                Text(loc.t("lessonHintClick")).font(Theme.sora(13)).foregroundColor(Theme.goldSoft)
 
                 HStack(spacing: 10) {
                     Button(loc.t("prevLesson")) { select(index - 1) }.buttonStyle(GhostButtonStyle()).disabled(index == 0)

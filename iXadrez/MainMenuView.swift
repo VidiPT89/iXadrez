@@ -16,10 +16,10 @@ struct MainMenuView: View {
             VStack(spacing: 28) {
                 VStack(spacing: 8) {
                     Text(loc.t("menuTitle"))
-                        .font(.system(size: 40, weight: .bold, design: .serif))
+                        .font(Theme.soraExtraBold(40))
                         .foregroundColor(Theme.goldSoft)
                     Text(loc.t("menuSubtitle"))
-                        .font(.system(size: 16))
+                        .font(Theme.sora(16))
                         .foregroundColor(Theme.inkDim)
                 }
                 .padding(.top, 12)
@@ -51,9 +51,9 @@ struct MainMenuView: View {
     private func modeCard(icon: String, title: String, desc: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             VStack(spacing: 8) {
-                Text(icon).font(.system(size: 34))
-                Text(title).font(.system(size: 16, weight: .bold)).foregroundColor(Theme.ink)
-                Text(desc).font(.system(size: 12)).foregroundColor(Theme.inkDim).multilineTextAlignment(.center)
+                Text(icon).font(Theme.sora(34))
+                Text(title).font(Theme.sora(16, weight: .bold)).foregroundColor(Theme.ink)
+                Text(desc).font(Theme.sora(12)).foregroundColor(Theme.inkDim).multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity, minHeight: 130)
             .padding(16)
@@ -64,7 +64,7 @@ struct MainMenuView: View {
 
     private var difficultyPanel: some View {
         VStack(spacing: 14) {
-            Text(loc.t("chooseDifficulty")).font(.system(size: 15, weight: .bold)).foregroundColor(Theme.ink)
+            Text(loc.t("chooseDifficulty")).font(Theme.sora(15, weight: .bold)).foregroundColor(Theme.ink)
             LazyVGrid(columns: columns, spacing: 12) {
                 difficultyButton(.beginner, stars: "★☆☆☆", label: loc.t("levelBeginner"))
                 difficultyButton(.easy, stars: "★★☆☆", label: loc.t("levelEasy"))
@@ -84,7 +84,7 @@ struct MainMenuView: View {
         } label: {
             VStack(spacing: 4) {
                 Text(stars).foregroundColor(Theme.goldSoft).tracking(2)
-                Text(label).font(.system(size: 14, weight: .semibold)).foregroundColor(Theme.ink)
+                Text(label).font(Theme.sora(14, weight: .semibold)).foregroundColor(Theme.ink)
             }
             .frame(maxWidth: .infinity, minHeight: 60)
             .background(RoundedRectangle(cornerRadius: 12).fill(Theme.bgSoft).overlay(RoundedRectangle(cornerRadius: 12).stroke(Theme.panelBorder, lineWidth: 1)))
