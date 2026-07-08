@@ -1,7 +1,14 @@
 import SwiftUI
+import FirebaseCore
 
 @main
 struct iXadrezApp: App {
+    init() {
+        if FirebaseApp.app() == nil {
+            FirebaseApp.configure()
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -11,12 +18,13 @@ struct iXadrezApp: App {
 }
 
 private enum AppScreen {
-    case menu, game, tutorial, help
+    case menu, game, tutorial, help, multiplayerLobby
 }
 
 struct ContentView: View {
     @ObservedObject var loc = Loc.shared
     @StateObject private var vm = GameViewModel()
+    @StateObject private var mpVM = MultiplayerViewModel()
     @State private var screen: AppScreen = .menu
     @State private var showSplash = true
     @State private var soundOn = SoundEngine.shared.isOn
@@ -34,7 +42,8 @@ struct ContentView: View {
                             onStart1v1: { vm.newGame(mode: .oneVOne); screen = .game },
                             onStartBot: { level in vm.newGame(mode: .bot, level: level); screen = .game },
                             onOpenTutorial: { screen = .tutorial },
-                            onOpenHelp: { screen = .help }
+                            onOpenHelp: { screen = .help },
+                            onOpenMultiplayer: { screen = .multiplayerLobby }
                         )
                     case .game:
                         GameView(vm: vm, onBackToMenu: { screen = .menu })
@@ -42,6 +51,13 @@ struct ContentView: View {
                         TutorialView(onBackToMenu: { screen = .menu })
                     case .help:
                         HelpView(onBackToMenu: { screen = .menu })
+                    case .multiplayerLobby:
+                        MultiplayerLobbyView(
+                            mpVM: mpVM,
+                            gameVM: vm,
+                            onReady: { screen = .game },
+                            onBack: { screen = .menu }
+                        )
                     }
                 }
                 .frame(maxHeight: .infinity)

@@ -3,6 +3,9 @@ import SwiftUI
 struct GameView: View {
     @ObservedObject var vm: GameViewModel
     @ObservedObject var loc = Loc.shared
+    @ObservedObject var mp = MultiplayerService.shared
+    @State private var chatText: String = ""
+    @State private var showResignConfirm = false
     var onBackToMenu: () -> Void
 
     var body: some View {
@@ -26,6 +29,10 @@ struct GameView: View {
                 statusCard
                 historyCard
 
+                if vm.mode == .multiplayer {
+                    chatCard
+                }
+
                 if vm.mode == .bot {
                     HStack(spacing: 10) {
                         Button(loc.t("undoMove")) { vm.undoLastTurn() }
@@ -37,10 +44,26 @@ struct GameView: View {
                     }
                 }
 
+                if vm.mode == .multiplayer {
+                    Button(loc.t("resignGame")) { showResignConfirm = true }
+                        .buttonStyle(GhostButtonStyle())
+                        .confirmationDialog(loc.t("resignConfirmTitle"), isPresented: $showResignConfirm, titleVisibility: .visible) {
+                            Button(loc.t("resignGame"), role: .destructive) { mp.resign() }
+                            Button(loc.t("cancelBtn"), role: .cancel) {}
+                        } message: {
+                            Text(loc.t("resignConfirmText"))
+                        }
+                }
+
                 HStack(spacing: 10) {
                     Button(loc.t("flipBoard")) { vm.flipBoard() }.buttonStyle(GhostButtonStyle())
-                    Button(loc.t("newGame")) { vm.newGame(mode: vm.mode, level: vm.botLevel) }.buttonStyle(GhostButtonStyle())
-                    Button(loc.t("backToMenu")) { onBackToMenu() }.buttonStyle(GhostButtonStyle())
+                    if vm.mode != .multiplayer {
+                        Button(loc.t("newGame")) { vm.newGame(mode: vm.mode, level: vm.botLevel) }.buttonStyle(GhostButtonStyle())
+                    }
+                    Button(loc.t("backToMenu")) {
+                        if vm.mode == .multiplayer { mp.leaveRoom() }
+                        onBackToMenu()
+                    }.buttonStyle(GhostButtonStyle())
                 }
             }
             .padding(20)
@@ -51,6 +74,50 @@ struct GameView: View {
         .sheet(isPresented: $vm.showResult) {
             resultSheet
         }
+        .sheet(item: multiplayerResultBinding) { result in
+            multiplayerResultSheet(result)
+        }
+    }
+
+    private var chatCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(loc.t("chatTitle")).font(Theme.sora(12, weight: .bold)).foregroundColor(Theme.inkDim).textCase(.uppercase)
+                Spacer()
+                Text(mp.opponentOnline ? loc.t("mpOpponentOnline") : loc.t("mpOpponentOffline"))
+                    .font(Theme.sora(11))
+                    .foregroundColor(mp.opponentOnline ? Color.green : Theme.inkDim)
+            }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 6) {
+                    ForEach(mp.chatMessages) { msg in
+                        Text(msg.text)
+                            .font(Theme.sora(13))
+                            .padding(.horizontal, 10).padding(.vertical, 6)
+                            .background(RoundedRectangle(cornerRadius: 10).fill(Theme.bgSoft).overlay(RoundedRectangle(cornerRadius: 10).stroke(msg.mine ? Theme.gold : Theme.panelBorder, lineWidth: 1)))
+                            .frame(maxWidth: .infinity, alignment: msg.mine ? .trailing : .leading)
+                    }
+                }
+            }
+            .frame(maxHeight: 160)
+            HStack(spacing: 8) {
+                TextField(loc.t("chatPlaceholder"), text: $chatText)
+                    .padding(.horizontal, 12).padding(.vertical, 8)
+                    .background(Capsule().fill(Theme.bgSoft).overlay(Capsule().stroke(Theme.panelBorder, lineWidth: 1)))
+                Button {
+                    mp.sendChat(chatText)
+                    chatText = ""
+                } label: {
+                    Image(systemName: "paperplane.fill").foregroundColor(Theme.bg)
+                        .padding(10)
+                        .background(Circle().fill(Theme.gold))
+                }
+                .disabled(chatText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(RoundedRectangle(cornerRadius: 16).fill(Theme.panel).overlay(RoundedRectangle(cornerRadius: 16).stroke(Theme.panelBorder, lineWidth: 1)))
     }
 
     private var boardSize: CGFloat {
@@ -71,7 +138,14 @@ struct GameView: View {
             Text(vm.game.turn == .white ? loc.t("turnWhite") : loc.t("turnBlack"))
                 .font(Theme.sora(17, weight: .bold))
                 .foregroundColor(Theme.ink)
-            let note: String = vm.thinking ? loc.t("thinking") : (vm.statusText.key == "check" ? loc.t("inCheck") : "")
+            let note: String = {
+                if vm.thinking { return loc.t("thinking") }
+                if vm.statusText.key == "check" { return loc.t("inCheck") }
+                if vm.mode == .multiplayer, !vm.statusText.over, let myColor = vm.networkColor, vm.game.turn != myColor {
+                    return loc.t("mpWaitingOpponent")
+                }
+                return ""
+            }()
             if !note.isEmpty {
                 Text(note).font(Theme.sora(14)).foregroundColor(Theme.goldSoft)
             }
@@ -136,6 +210,36 @@ struct GameView: View {
         }
         .padding(32)
         .presentationDetents([.height(180)])
+    }
+
+    // MARK: Multiplayer result sheet
+
+    private struct ResultIdentifiable: Identifiable { let id: String }
+    private var multiplayerResultBinding: Binding<ResultIdentifiable?> {
+        Binding(
+            get: { vm.multiplayerResult.map { ResultIdentifiable(id: $0) } },
+            set: { if $0 == nil { vm.multiplayerResult = nil } }
+        )
+    }
+
+    private func multiplayerResultSheet(_ wrapped: ResultIdentifiable) -> some View {
+        let result = wrapped.id
+        let resignedColor = result.hasPrefix("resign-") ? PieceColor(rawValue: String(result.suffix(1))) : nil
+        let iWon = resignedColor != nil && resignedColor != vm.networkColor
+        return VStack(spacing: 16) {
+            Text(iWon ? "🏆" : "🏳️").font(Theme.sora(44))
+            Text(iWon ? loc.t("resultOpponentResignedTitle") : loc.t("resultYouResignedTitle"))
+                .font(Theme.sora(22, weight: .bold)).foregroundColor(Theme.goldSoft)
+            Text(iWon ? loc.t("resultOpponentResignedText") : loc.t("resultYouResignedText"))
+                .font(Theme.sora(15)).foregroundColor(Theme.inkDim).multilineTextAlignment(.center)
+            Button(loc.t("backToMenu")) {
+                vm.multiplayerResult = nil
+                mp.leaveRoom()
+                onBackToMenu()
+            }.buttonStyle(GhostButtonStyle())
+        }
+        .padding(32)
+        .presentationDetents([.height(280)])
     }
 
     // MARK: Result sheet

@@ -8,6 +8,7 @@ struct MainMenuView: View {
     var onStartBot: (BotDifficulty) -> Void
     var onOpenTutorial: () -> Void
     var onOpenHelp: () -> Void
+    var onOpenMultiplayer: () -> Void
 
     private let columns = [GridItem(.flexible(), spacing: 16), GridItem(.flexible(), spacing: 16)]
 
@@ -37,6 +38,10 @@ struct MainMenuView: View {
                     }
                     modeCard(icon: "❓", title: loc.t("modeHelp"), desc: loc.t("modeHelpDesc")) {
                         onOpenHelp()
+                    }
+                    modeCard(icon: "🌐", title: loc.t("modeMultiplayer"), desc: loc.t("modeMultiplayerDesc")) {
+                        showDifficulty = false
+                        onOpenMultiplayer()
                     }
                 }
 

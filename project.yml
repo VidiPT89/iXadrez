@@ -6,6 +6,10 @@ options:
 configs:
   Debug: debug
   Release: release
+packages:
+  FirebaseSDK:
+    url: https://github.com/firebase/firebase-ios-sdk
+    from: 11.0.0
 targets:
   iXadrez:
     type: application
@@ -13,6 +17,11 @@ targets:
     deploymentTarget: "16.0"
     sources:
       - path: iXadrez
+    dependencies:
+      - package: FirebaseSDK
+        product: FirebaseAuth
+      - package: FirebaseSDK
+        product: FirebaseFirestore
     info:
       path: Generated/Info.plist
       properties:

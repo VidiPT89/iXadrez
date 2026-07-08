@@ -16,12 +16,18 @@
 		20740E363B2460D6BF943F3E /* SoundEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2824069D008A4B702A8F122 /* SoundEngine.swift */; };
 		2286D8C928D1381E2E76A3B3 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FA862E5612C3419D8C62AE /* HelpView.swift */; };
 		26FC80C9EB5C6614F0891537 /* Sora-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 54BD15D390EC3A6EF0A6F8C7 /* Sora-Bold.ttf */; };
+		3657AE065B0B873334EC6A03 /* MultiplayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776954B10623092535D0E44C /* MultiplayerService.swift */; };
 		51469F59F6568A05C2130EF3 /* ChessBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343B944503A26D4075A72B70 /* ChessBoardView.swift */; };
 		6091793E2034EB27BECB9336 /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A18E8588D2A5CAE73A22A8 /* GameViewModel.swift */; };
 		648EB1B3EF9E0F18AB241066 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120007563972E39D33D16EC9 /* TutorialView.swift */; };
 		6FD66C12E89D0A4227A3CAE6 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27F9941C19DFE081E56FE49 /* Localization.swift */; };
 		7EBDC5E951DE0E1CAD20E252 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB83797392404B944C3FA3DF /* Theme.swift */; };
+		825A6B0A7B94AE1C32D10652 /* MultiplayerLobbyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA281C3B872A022B72F2D27B /* MultiplayerLobbyView.swift */; };
 		A1F1032C5373A286B148010E /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7A183396A009214E471C8424 /* OFL.txt */; };
+		A529BFED6458F984FBCE5388 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 16FF32A475704283A5C61B3C /* FirebaseAuth */; };
+		B50F7075FB27E28947A55423 /* MultiplayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4186E1FD73CEB9BAD967C12 /* MultiplayerViewModel.swift */; };
+		BCC8363C2578E92AC65CABF2 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 25370C26F172C832DA246D40 /* FirebaseFirestore */; };
+		C075DCB7983950427F4E857E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8F1C4FCEE3DB730A7A206DCD /* GoogleService-Info.plist */; };
 		D040358F387D299CDAA80C4A /* ChessAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53749EBDA35DA3FF7607E331 /* ChessAI.swift */; };
 		D1D0081AFC7D015FFE67EA31 /* ChessEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9038AB5C682B7203B812CADE /* ChessEngine.swift */; };
 		FD3B1AD080518BD13119907C /* iXadrezApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1F4AB7CA5015A0DD50DDAE /* iXadrezApp.swift */; };
@@ -38,18 +44,34 @@
 		63E197FD14DB8AB5233106E5 /* Sora-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sora-SemiBold.ttf"; sourceTree = "<group>"; };
 		6C1F4AB7CA5015A0DD50DDAE /* iXadrezApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iXadrezApp.swift; sourceTree = "<group>"; };
 		7256C8980E61889615CD76E9 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		776954B10623092535D0E44C /* MultiplayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerService.swift; sourceTree = "<group>"; };
 		7A183396A009214E471C8424 /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
+		8F1C4FCEE3DB730A7A206DCD /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9038AB5C682B7203B812CADE /* ChessEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessEngine.swift; sourceTree = "<group>"; };
 		9148F34EBAEB447922365A6A /* iXadrez.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iXadrez.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		99E5AC21796F9C2EF320F970 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A27F9941C19DFE081E56FE49 /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		A2824069D008A4B702A8F122 /* SoundEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundEngine.swift; sourceTree = "<group>"; };
 		A6A18E8588D2A5CAE73A22A8 /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
+		AA281C3B872A022B72F2D27B /* MultiplayerLobbyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerLobbyView.swift; sourceTree = "<group>"; };
 		BB83797392404B944C3FA3DF /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		C4186E1FD73CEB9BAD967C12 /* MultiplayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerViewModel.swift; sourceTree = "<group>"; };
 		F39A81D67A8BA9828DA62EB2 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		F7FA862E5612C3419D8C62AE /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		FAA4EE63C9220A8F4240CD7E /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A8F09E3E7B4967B43A043210 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A529BFED6458F984FBCE5388 /* FirebaseAuth in Frameworks */,
+				BCC8363C2578E92AC65CABF2 /* FirebaseFirestore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		6ED157797B4FD66D3F8268E8 /* iXadrez */ = {
@@ -61,10 +83,14 @@
 				9038AB5C682B7203B812CADE /* ChessEngine.swift */,
 				F39A81D67A8BA9828DA62EB2 /* GameView.swift */,
 				A6A18E8588D2A5CAE73A22A8 /* GameViewModel.swift */,
+				8F1C4FCEE3DB730A7A206DCD /* GoogleService-Info.plist */,
 				F7FA862E5612C3419D8C62AE /* HelpView.swift */,
 				6C1F4AB7CA5015A0DD50DDAE /* iXadrezApp.swift */,
 				A27F9941C19DFE081E56FE49 /* Localization.swift */,
 				FAA4EE63C9220A8F4240CD7E /* MainMenuView.swift */,
+				AA281C3B872A022B72F2D27B /* MultiplayerLobbyView.swift */,
+				776954B10623092535D0E44C /* MultiplayerService.swift */,
+				C4186E1FD73CEB9BAD967C12 /* MultiplayerViewModel.swift */,
 				A2824069D008A4B702A8F122 /* SoundEngine.swift */,
 				7256C8980E61889615CD76E9 /* SplashView.swift */,
 				BB83797392404B944C3FA3DF /* Theme.swift */,
@@ -111,6 +137,7 @@
 			buildPhases = (
 				64B0C6E2F781EF0D4DED6824 /* Sources */,
 				CB199A5A67A1A6D2D6561FEC /* Resources */,
+				A8F09E3E7B4967B43A043210 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -118,6 +145,8 @@
 			);
 			name = iXadrez;
 			packageProductDependencies = (
+				16FF32A475704283A5C61B3C /* FirebaseAuth */,
+				25370C26F172C832DA246D40 /* FirebaseFirestore */,
 			);
 			productName = iXadrez;
 			productReference = 9148F34EBAEB447922365A6A /* iXadrez.app */;
@@ -146,6 +175,9 @@
 			);
 			mainGroup = DD341F6E884338553F36775E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				32976C6F5A6F2F2C8237293A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C8B98DD2140D7D3F14B1D03B /* Products */;
 			projectDirPath = "";
@@ -162,6 +194,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D392AEB037474F1EF274518 /* Assets.xcassets in Resources */,
+				C075DCB7983950427F4E857E /* GoogleService-Info.plist in Resources */,
 				A1F1032C5373A286B148010E /* OFL.txt in Resources */,
 				26FC80C9EB5C6614F0891537 /* Sora-Bold.ttf in Resources */,
 				06BB2B536F283725BA6F8B7E /* Sora-ExtraBold.ttf in Resources */,
@@ -185,6 +218,9 @@
 				2286D8C928D1381E2E76A3B3 /* HelpView.swift in Sources */,
 				6FD66C12E89D0A4227A3CAE6 /* Localization.swift in Sources */,
 				FDCEAD3A26F9F3095614945F /* MainMenuView.swift in Sources */,
+				825A6B0A7B94AE1C32D10652 /* MultiplayerLobbyView.swift in Sources */,
+				3657AE065B0B873334EC6A03 /* MultiplayerService.swift in Sources */,
+				B50F7075FB27E28947A55423 /* MultiplayerViewModel.swift in Sources */,
 				20740E363B2460D6BF943F3E /* SoundEngine.swift in Sources */,
 				0BFE50F22AA18DF0E9CF4B6D /* SplashView.swift in Sources */,
 				7EBDC5E951DE0E1CAD20E252 /* Theme.swift in Sources */,
@@ -379,6 +415,30 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		32976C6F5A6F2F2C8237293A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		16FF32A475704283A5C61B3C /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 32976C6F5A6F2F2C8237293A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		25370C26F172C832DA246D40 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 32976C6F5A6F2F2C8237293A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AD35E3D3D46B4A409FD2DEFC /* Project object */;
 }

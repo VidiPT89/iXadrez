@@ -3,7 +3,7 @@ import Combine
 import SwiftUI
 
 enum GameMode {
-    case oneVOne, bot
+    case oneVOne, bot, multiplayer
 }
 
 @MainActor
@@ -22,13 +22,25 @@ final class GameViewModel: ObservableObject {
     @Published var promotionCandidates: [Move]? = nil
     @Published var showResult: Bool = false
     @Published private(set) var canRedo: Bool = false
+    /// My assigned color in multiplayer mode; nil for local modes. Gates whose turn it is to tap.
+    @Published var networkColor: PieceColor? = nil
+    /// Set when the opponent resigns (or I do) — e.g. "resign-w". The engine can't detect this
+    /// on its own since it's not a rules outcome, so it's surfaced as separate state.
+    @Published var multiplayerResult: String? = nil
+
+    /// Fires after a genuinely local move (mode == .multiplayer only) so a wrapper view model
+    /// can broadcast it — never fires for moves applied via applyRemoteMove or the bot.
+    var onLocalMove: ((MoveRecord) -> Void)? = nil
 
     private var requestToken = UUID()
     private var redoStack: [[MoveRecord]] = []
 
-    func newGame(mode: GameMode, level: BotDifficulty = .medium) {
+    func newGame(mode: GameMode, level: BotDifficulty = .medium, networkColor: PieceColor? = nil) {
         self.mode = mode
         self.botLevel = level
+        self.networkColor = networkColor
+        self.multiplayerResult = nil
+        onLocalMove = nil
         requestToken = UUID()
         game = ChessGame()
         pieces = PieceInstance.fresh(from: game.board)
@@ -49,6 +61,7 @@ final class GameViewModel: ObservableObject {
 
     func tapSquare(_ square: Square) {
         guard !thinking, !game.isGameOver else { return }
+        if mode == .multiplayer, let myColor = networkColor, game.turn != myColor { return }
         if let sel = selected {
             let candidates = legalTargets.filter { $0.to == square }
             if !candidates.isEmpty {
@@ -81,7 +94,7 @@ final class GameViewModel: ObservableObject {
         finalize(chosen)
     }
 
-    private func finalize(_ move: Move) {
+    private func finalize(_ move: Move, isLocal: Bool = true) {
         let wasCapture = move.capture
         guard let record = game.makeMove(from: move.from, to: move.to, promotion: move.promotion) else { return }
         selected = nil
@@ -106,6 +119,18 @@ final class GameViewModel: ObservableObject {
         if mode == .bot, game.turn == Self.botColor {
             requestBotMove()
         }
+        if isLocal, mode == .multiplayer {
+            onLocalMove?(record)
+        }
+    }
+
+    /// Applies an opponent's move that arrived over the network. Looks the move up via
+    /// legalMoves so castle/en-passant metadata is populated correctly for the piece-list
+    /// animation, then reuses the exact same apply path as a local move.
+    func applyRemoteMove(from: Square, to: Square, promotion: PieceType?) {
+        let candidates = game.legalMoves(from: from).filter { $0.to == to && $0.promotion == promotion }
+        guard let move = candidates.first ?? game.legalMoves(from: from).first(where: { $0.to == to }) else { return }
+        finalize(move, isLocal: false)
     }
 
     /// Updates the piece-instance list in place, preserving identity so SwiftUI slides the
@@ -155,7 +180,7 @@ final class GameViewModel: ObservableObject {
                 guard let self, self.requestToken == token else { return }
                 self.thinking = false
                 if let move {
-                    self.finalize(Move(from: move.from, to: move.to, piece: move.piece, capture: self.game.pieceAt(move.to.r, move.to.c) != nil, promotion: move.promotion))
+                    self.finalize(move)
                 }
             }
         }

@@ -17,6 +17,7 @@ A versão iOS nativa de [Xadrez para web](https://github.com/VidiPT89/Xadrez). X
 - 🔊 Efeitos sonoros sintetizados em tempo real via `AVAudioEngine` para lances, capturas, xeque e fim de jogo
 - 🎬 Splash de abertura animado com apresentação da app, que desaparece automaticamente
 - 🖼️ Tabuleiro totalmente adaptável (iPhone e iPad, portrait e landscape), com destaque de lances legais, última jogada e xeque
+- 🌐 Modo Multijogador — joga online com um amigo através de uma sala com código de 6 caracteres ou link de convite, com chat em tempo real, indicador de presença do adversário e desistência
 
 ## 🛠️ Tech Stack
 
@@ -45,7 +46,11 @@ iXadrez/
     ├── SoundEngine.swift                   # Sintetizador de efeitos sonoros em tempo real
     ├── Localization.swift                   # Strings PT/EN
     ├── Theme.swift                           # Cores e estilos partilhados
-    └── Assets.xcassets                        # Ícone da app
+    ├── MultiplayerService.swift               # Salas, lances, chat e presença via Firestore
+    ├── MultiplayerViewModel.swift               # Liga o MultiplayerService ao GameViewModel
+    ├── MultiplayerLobbyView.swift                # Criar/entrar numa sala, partilhar convite
+    ├── GoogleService-Info.plist                   # Configuração do projeto Firebase (ver secção Multijogador)
+    └── Assets.xcassets                             # Ícone da app
 ```
 
 ## ⚙️ Game Mechanics
@@ -87,6 +92,16 @@ open iXadrez.xcodeproj
 ```
 
 Requires Xcode 15+ and iOS 16+.
+
+## 🌐 Multijogador
+
+O modo Multijogador usa [Firebase](https://firebase.google.com/) (Firestore + autenticação anónima) para sincronizar as jogadas e o chat entre dispositivos em tempo real — sem servidor próprio. Para ativar:
+
+1. Cria um projeto gratuito na [Firebase Console](https://console.firebase.google.com/), ativa **Authentication → Anonymous** e cria uma **Firestore Database** em modo produção.
+2. Publica as regras de segurança do Firestore.
+3. Regista uma app iOS no projeto com o bundle ID `com.vidi.iXadrez`, descarrega o `GoogleService-Info.plist` gerado e substitui o ficheiro placeholder em `iXadrez/iXadrez/`.
+
+Sem esta configuração, a app funciona normalmente em todos os outros modos — o cartão "Multijogador" fica apenas indisponível.
 
 ## 📝 Notes
 
