@@ -4,7 +4,12 @@ import FirebaseAuth
 import FirebaseFirestore
 
 enum MultiplayerError: Error {
-    case notConfigured, roomNotFound, roomFull, roomFinished, createFailed
+    case notConfigured, roomNotFound, roomFull, roomFinished, createFailed, lobbyFull
+}
+
+struct QuickPlayResult {
+    let code: String
+    let isHost: Bool
 }
 
 struct ChatMessage: Identifiable {
@@ -63,36 +68,21 @@ final class MultiplayerService: ObservableObject {
         return result.user.uid
     }
 
-    func createRoom() async throws -> String {
-        guard Self.configured else { throw MultiplayerError.notConfigured }
-        let uid = try await ensureSignedIn()
-        for _ in 0..<6 {
-            let code = randomCode()
-            let ref = db().collection("rooms").document(code)
-            guard let existing = try? await ref.getDocument(), !existing.exists else { continue }
-            do {
-                try await ref.setData([
-                    "hostUid": uid, "hostColor": "w", "guestUid": NSNull(),
-                    "status": "waiting", "result": NSNull(),
-                    "createdAt": FieldValue.serverTimestamp(), "updatedAt": FieldValue.serverTimestamp(),
-                    "hostPresence": ["online": true, "lastSeen": FieldValue.serverTimestamp()],
-                    "guestPresence": ["online": false, "lastSeen": FieldValue.serverTimestamp()],
-                ])
-            } catch { continue }
-            return try await joinRoom(code)
-        }
-        throw MultiplayerError.createFailed
+    private let lobbyCodes = ["LOBBYA", "LOBBYB", "LOBBYC"]
+
+    private func freshRoomDoc(hostUid: String) -> [String: Any] {
+        [
+            "hostUid": hostUid, "hostColor": "w", "guestUid": NSNull(),
+            "status": "waiting", "result": NSNull(),
+            "createdAt": FieldValue.serverTimestamp(), "updatedAt": FieldValue.serverTimestamp(),
+            "hostPresence": ["online": true, "lastSeen": FieldValue.serverTimestamp()],
+            "guestPresence": ["online": false, "lastSeen": FieldValue.serverTimestamp()],
+        ]
     }
 
-    func joinRoom(_ code: String) async throws -> String {
-        guard Self.configured else { throw MultiplayerError.notConfigured }
-        let uid = try await ensureSignedIn()
-        myUid = uid
-        let ref = db().collection("rooms").document(code)
-        guard let snap = try? await ref.getDocument(), snap.exists, let data = snap.data() else {
-            throw MultiplayerError.roomNotFound
-        }
-
+    @discardableResult
+    private func enterRoom(code: String, data: [String: Any]) async throws -> String {
+        let uid = myUid!
         let hostUid = data["hostUid"] as? String
         let guestUid = data["guestUid"] as? String
         let hostColor = (data["hostColor"] as? String) ?? "w"
@@ -107,7 +97,7 @@ final class MultiplayerService: ObservableObject {
         } else if guestUid == nil {
             if status == "finished" { throw MultiplayerError.roomFinished }
             do {
-                try await ref.updateData([
+                try await db().collection("rooms").document(code).updateData([
                     "guestUid": uid, "status": "active",
                     "guestPresence": ["online": true, "lastSeen": FieldValue.serverTimestamp()],
                     "updatedAt": FieldValue.serverTimestamp(),
@@ -132,6 +122,66 @@ final class MultiplayerService: ObservableObject {
         attachChatListener()
         startHeartbeat()
         return code
+    }
+
+    func createRoom() async throws -> String {
+        guard Self.configured else { throw MultiplayerError.notConfigured }
+        let uid = try await ensureSignedIn()
+        for _ in 0..<6 {
+            let code = randomCode()
+            let ref = db().collection("rooms").document(code)
+            guard let existing = try? await ref.getDocument(), !existing.exists else { continue }
+            do {
+                try await ref.setData(freshRoomDoc(hostUid: uid))
+            } catch { continue }
+            return try await joinRoom(code)
+        }
+        throw MultiplayerError.createFailed
+    }
+
+    func joinRoom(_ code: String) async throws -> String {
+        guard Self.configured else { throw MultiplayerError.notConfigured }
+        let uid = try await ensureSignedIn()
+        myUid = uid
+        let ref = db().collection("rooms").document(code)
+        guard let snap = try? await ref.getDocument(), snap.exists, let data = snap.data() else {
+            throw MultiplayerError.roomNotFound
+        }
+        return try await enterRoom(code: code, data: data)
+    }
+
+    /// Joins (or claims/recycles) the first available room in the fixed public lobby pool, so two
+    /// people can play without coordinating a code: whoever arrives first waits as host, whoever
+    /// arrives second joins immediately as guest and the game starts right away.
+    func quickPlay() async throws -> QuickPlayResult {
+        guard Self.configured else { throw MultiplayerError.notConfigured }
+        let uid = try await ensureSignedIn()
+        myUid = uid
+        for code in lobbyCodes {
+            let ref = db().collection("rooms").document(code)
+            let snap = try? await ref.getDocument()
+            let data: [String: Any]? = (snap?.exists == true) ? snap?.data() : nil
+
+            if data == nil || (data?["status"] as? String) == "finished" {
+                do {
+                    try await ref.setData(freshRoomDoc(hostUid: uid))
+                } catch { continue } // someone else claimed/recycled this slot first — try the next one
+                try await enterRoom(code: code, data: freshRoomDoc(hostUid: uid))
+                return QuickPlayResult(code: code, isHost: true)
+            }
+            if let data, (data["hostUid"] as? String) == uid || (data["guestUid"] as? String) == uid {
+                try await enterRoom(code: code, data: data) // reconnecting to my own quick-play game
+                return QuickPlayResult(code: code, isHost: role == "host")
+            }
+            if let data, (data["status"] as? String) == "waiting", (data["guestUid"] as? String) == nil {
+                do {
+                    try await enterRoom(code: code, data: data)
+                } catch { continue }
+                return QuickPlayResult(code: code, isHost: false)
+            }
+            // occupied by two other players — try the next pool slot
+        }
+        throw MultiplayerError.lobbyFull
     }
 
     private func attachRoomListener() {

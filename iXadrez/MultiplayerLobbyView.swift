@@ -38,6 +38,14 @@ struct MultiplayerLobbyView: View {
             if !MultiplayerService.configured {
                 Text(loc.t("mpNotConfigured")).font(Theme.sora(13)).foregroundColor(Theme.danger).multilineTextAlignment(.center)
             }
+            VStack(spacing: 6) {
+                Button(loc.t("mpQuickPlay")) {
+                    mpVM.quickPlay(gameVM: gameVM, onReady: onReady)
+                }
+                .buttonStyle(GhostButtonStyle())
+                .disabled(!MultiplayerService.configured)
+                Text(loc.t("mpQuickPlayDesc")).font(Theme.sora(12)).foregroundColor(Theme.inkDim).multilineTextAlignment(.center)
+            }
             HStack(spacing: 10) {
                 Button(loc.t("mpCreateRoom")) {
                     mpVM.createRoom(gameVM: gameVM, onReady: onReady)

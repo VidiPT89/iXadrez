@@ -55,6 +55,29 @@ final class MultiplayerViewModel: ObservableObject {
         }
     }
 
+    func quickPlay(gameVM: GameViewModel, onReady: @escaping () -> Void) {
+        begin(gameVM: gameVM)
+        errorMessage = nil
+        waitingForOpponent = false
+        service.onOpponentJoined = { [weak self] in
+            self?.waitingForOpponent = false
+            onReady()
+        }
+        Task {
+            do {
+                let result = try await service.quickPlay()
+                gameVM.networkColor = service.myColor
+                if result.isHost {
+                    waitingForOpponent = true
+                } else {
+                    onReady()
+                }
+            } catch {
+                errorMessage = Self.message(for: error)
+            }
+        }
+    }
+
     func leave() {
         service.leaveRoom()
         waitingForOpponent = false
@@ -65,6 +88,7 @@ final class MultiplayerViewModel: ObservableObject {
         case .roomNotFound: return Loc.shared.t("mpErrorNotFound")
         case .roomFull: return Loc.shared.t("mpErrorFull")
         case .roomFinished: return Loc.shared.t("mpErrorFinished")
+        case .lobbyFull: return Loc.shared.t("mpErrorLobbyFull")
         case .notConfigured: return Loc.shared.t("mpNotConfigured")
         default: return Loc.shared.t("mpErrorGeneric")
         }
