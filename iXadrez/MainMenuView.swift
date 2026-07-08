@@ -13,43 +13,52 @@ struct MainMenuView: View {
     private let columns = [GridItem(.flexible(), spacing: 16), GridItem(.flexible(), spacing: 16)]
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 28) {
-                VStack(spacing: 8) {
-                    Text(loc.t("menuTitle"))
-                        .font(Theme.soraExtraBold(40))
-                        .foregroundColor(Theme.goldSoft)
-                    Text(loc.t("menuSubtitle"))
-                        .font(Theme.sora(16))
-                        .foregroundColor(Theme.inkDim)
-                }
-                .padding(.top, 12)
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(spacing: 28) {
+                    VStack(spacing: 8) {
+                        Text(loc.t("menuTitle"))
+                            .font(Theme.soraExtraBold(40))
+                            .foregroundColor(Theme.goldSoft)
+                        Text(loc.t("menuSubtitle"))
+                            .font(Theme.sora(16))
+                            .foregroundColor(Theme.inkDim)
+                    }
+                    .padding(.top, 12)
 
-                LazyVGrid(columns: columns, spacing: 16) {
-                    modeCard(icon: "🧑‍🤝‍🧑", title: loc.t("mode1v1"), desc: loc.t("mode1v1Desc")) {
-                        showDifficulty = false
-                        onStart1v1()
+                    LazyVGrid(columns: columns, spacing: 16) {
+                        modeCard(icon: "🧑‍🤝‍🧑", title: loc.t("mode1v1"), desc: loc.t("mode1v1Desc")) {
+                            showDifficulty = false
+                            onStart1v1()
+                        }
+                        modeCard(icon: "🤖", title: loc.t("modeBot"), desc: loc.t("modeBotDesc")) {
+                            withAnimation { showDifficulty = true }
+                        }
+                        modeCard(icon: "🎓", title: loc.t("modeTutorial"), desc: loc.t("modeTutorialDesc")) {
+                            onOpenTutorial()
+                        }
+                        modeCard(icon: "❓", title: loc.t("modeHelp"), desc: loc.t("modeHelpDesc")) {
+                            onOpenHelp()
+                        }
+                        modeCard(icon: "🌐", title: loc.t("modeMultiplayer"), desc: loc.t("modeMultiplayerDesc")) {
+                            showDifficulty = false
+                            onOpenMultiplayer()
+                        }
                     }
-                    modeCard(icon: "🤖", title: loc.t("modeBot"), desc: loc.t("modeBotDesc")) {
-                        withAnimation { showDifficulty = true }
-                    }
-                    modeCard(icon: "🎓", title: loc.t("modeTutorial"), desc: loc.t("modeTutorialDesc")) {
-                        onOpenTutorial()
-                    }
-                    modeCard(icon: "❓", title: loc.t("modeHelp"), desc: loc.t("modeHelpDesc")) {
-                        onOpenHelp()
-                    }
-                    modeCard(icon: "🌐", title: loc.t("modeMultiplayer"), desc: loc.t("modeMultiplayerDesc")) {
-                        showDifficulty = false
-                        onOpenMultiplayer()
+
+                    if showDifficulty {
+                        difficultyPanel
+                            .id("difficultyPanel")
                     }
                 }
-
-                if showDifficulty {
-                    difficultyPanel
+                .padding(20)
+            }
+            .onChange(of: showDifficulty) { isShown in
+                guard isShown else { return }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                    withAnimation { proxy.scrollTo("difficultyPanel", anchor: .bottom) }
                 }
             }
-            .padding(20)
         }
     }
 
