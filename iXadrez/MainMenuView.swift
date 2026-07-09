@@ -13,7 +13,7 @@ struct MainMenuView: View {
     private let columns = [GridItem(.flexible(), spacing: 16), GridItem(.flexible(), spacing: 16)]
 
     var body: some View {
-        ScrollViewReader { proxy in
+        ZStack {
             ScrollView {
                 VStack(spacing: 28) {
                     VStack(spacing: 8) {
@@ -45,19 +45,15 @@ struct MainMenuView: View {
                             onOpenMultiplayer()
                         }
                     }
-
-                    if showDifficulty {
-                        difficultyPanel
-                            .id("difficultyPanel")
-                    }
                 }
                 .padding(20)
             }
-            .onChange(of: showDifficulty) { isShown in
-                guard isShown else { return }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                    withAnimation { proxy.scrollTo("difficultyPanel", anchor: .bottom) }
-                }
+
+            if showDifficulty {
+                Color.black.opacity(0.72)
+                    .ignoresSafeArea()
+                    .onTapGesture { withAnimation { showDifficulty = false } }
+                difficultyPanel
             }
         }
     }
