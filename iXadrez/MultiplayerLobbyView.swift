@@ -10,6 +10,7 @@ struct MultiplayerLobbyView: View {
     private enum Step { case choice, join }
     @State private var step: Step = .choice
     @State private var joinCode: String = ""
+    @State private var isQuickPlayWaiting: Bool = false
 
     var body: some View {
         VStack(spacing: 18) {
@@ -40,6 +41,7 @@ struct MultiplayerLobbyView: View {
             }
             VStack(spacing: 6) {
                 Button(loc.t("mpQuickPlay")) {
+                    isQuickPlayWaiting = true
                     mpVM.quickPlay(gameVM: gameVM, onReady: onReady)
                 }
                 .buttonStyle(GhostButtonStyle())
@@ -48,6 +50,7 @@ struct MultiplayerLobbyView: View {
             }
             HStack(spacing: 10) {
                 Button(loc.t("mpCreateRoom")) {
+                    isQuickPlayWaiting = false
                     mpVM.createRoom(gameVM: gameVM, onReady: onReady)
                 }
                 .buttonStyle(GhostButtonStyle())
@@ -90,7 +93,9 @@ struct MultiplayerLobbyView: View {
     private var waitingView: some View {
         VStack(spacing: 14) {
             Text(loc.t("mpWaitingTitle")).font(Theme.sora(15, weight: .bold)).foregroundColor(Theme.ink)
-            if let code = mpVM.service.roomCode {
+            // Only a deliberately-created room is worth showing/sharing a code for — Quick Play's
+            // whole point is that no code is needed, so keep that wait screen plain.
+            if !isQuickPlayWaiting, let code = mpVM.service.roomCode {
                 Text(code)
                     .font(.system(.largeTitle, design: .monospaced))
                     .tracking(6)
