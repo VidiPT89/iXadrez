@@ -179,7 +179,14 @@ final class MultiplayerService: ObservableObject {
                 } catch { continue }
                 return QuickPlayResult(code: code, isHost: false)
             }
-            // occupied by two other players — try the next pool slot
+            // Occupied by two other players — try reclaiming it in case it's actually an
+            // abandoned game (both sides have been offline a while). The security rules are
+            // the real arbiter: this write only succeeds if both presences are genuinely stale.
+            do {
+                try await ref.setData(freshRoomDoc(hostUid: uid))
+            } catch { continue } // still genuinely occupied — try the next pool slot
+            try await enterRoom(code: code, data: freshRoomDoc(hostUid: uid))
+            return QuickPlayResult(code: code, isHost: true)
         }
         throw MultiplayerError.lobbyFull
     }
