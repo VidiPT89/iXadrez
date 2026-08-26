@@ -99,11 +99,15 @@ enum ChessAI {
         return score
     }
 
-    private static func orderMoves(_ moves: [Move]) -> [Move] {
+    private static func orderMoves(_ moves: [Move], _ game: ChessGame) -> [Move] {
         moves.sorted { a, b in
             func score(_ m: Move) -> Int {
                 var s = 0
-                if m.capture { s += 1000 }
+                if m.capture {
+                    let victim = m.enPassant ? PieceType.pawn : game.board[m.to.r][m.to.c]?.type
+                    let victimValue = victim?.value ?? PieceType.pawn.value
+                    s += 10000 + victimValue * 10 - m.piece.type.value
+                }
                 if m.promotion != nil { s += 900 }
                 return s
             }
@@ -118,7 +122,7 @@ enum ChessAI {
         if standPat >= beta { return beta }
         if standPat > alpha { alpha = standPat }
 
-        let moves = orderMoves(game.allLegalMoves(for: game.turn).filter { $0.capture || $0.promotion != nil })
+        let moves = orderMoves(game.allLegalMoves(for: game.turn).filter { $0.capture || $0.promotion != nil }, game)
         for move in moves {
             let child = game.clone()
             child.makeMove(from: move.from, to: move.to, promotion: move.promotion)
@@ -140,7 +144,7 @@ enum ChessAI {
         }
         if Date() > deadline { return colorSign * evaluate(game) }
 
-        let moves = orderMoves(game.allLegalMoves(for: game.turn))
+        let moves = orderMoves(game.allLegalMoves(for: game.turn), game)
         if moves.isEmpty {
             return game.isInCheck(game.turn) ? -mateScore - depth : 0
         }
@@ -172,7 +176,7 @@ enum ChessAI {
         var scored: [(move: Move, score: Int)] = []
 
         if cfg.timeBudget >= 1.5 {
-            var currentOrder = orderMoves(rootMoves)
+            var currentOrder = orderMoves(rootMoves, game)
             for d in 1...cfg.depth {
                 var results: [(move: Move, score: Int)] = []
                 for move in currentOrder {
@@ -188,7 +192,7 @@ enum ChessAI {
                 if Date() > deadline { break }
             }
         } else {
-            for move in orderMoves(rootMoves) {
+            for move in orderMoves(rootMoves, game) {
                 let child = game.clone()
                 child.makeMove(from: move.from, to: move.to, promotion: move.promotion)
                 let score = -negamax(child, depth: cfg.depth - 1, alpha: Int.min / 2, beta: Int.max / 2, colorSign: -colorSign, useQuiescence: cfg.quiescence, deadline: deadline)
