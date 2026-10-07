@@ -11,7 +11,8 @@ struct GameView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 18) {
-                playerTag(color: .black)
+                // The top tag belongs to whichever color sits at the top of the (possibly flipped) board.
+                playerTag(color: vm.flipped ? .white : .black)
 
                 ChessBoardView(
                     pieces: vm.pieces,
@@ -24,7 +25,7 @@ struct GameView: View {
                 )
                 .frame(width: boardSize, height: boardSize)
 
-                playerTag(color: .white)
+                playerTag(color: vm.flipped ? .black : .white)
 
                 statusCard
                 historyCard
