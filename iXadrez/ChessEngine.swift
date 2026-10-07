@@ -137,8 +137,19 @@ final class ChessGame {
             }
         }
         key += "|\(castling.wK ? 1 : 0)\(castling.wQ ? 1 : 0)\(castling.bK ? 1 : 0)\(castling.bQ ? 1 : 0)"
-        key += "|\(enPassant?.name ?? "-")"
+        key += "|" + (enPassantCapturable() ? enPassant!.name : "-")
         return key
+    }
+
+    /// The en passant square only distinguishes positions (FIDE repetition rule) when a pawn of the
+    /// side to move actually stands ready to capture onto it.
+    private func enPassantCapturable() -> Bool {
+        guard let ep = enPassant else { return false }
+        let pawnRow = turn == .white ? ep.r + 1 : ep.r - 1
+        return [ep.c - 1, ep.c + 1].contains { cc in
+            guard Square(r: pawnRow, c: cc).inBounds(), let p = board[pawnRow][cc] else { return false }
+            return p.type == .pawn && p.color == turn
+        }
     }
 
     private func recordPosition() {
@@ -451,14 +462,17 @@ final class ChessGame {
     }
 
     private func isInsufficientMaterial() -> Bool {
-        var pieces: [Piece] = []
-        for r in 0..<8 { for c in 0..<8 { if let p = board[r][c] { pieces.append(p) } } }
-        if pieces.count > 4 { return false }
-        let nonKings = pieces.filter { $0.type != .king }
-        if nonKings.isEmpty { return true }
-        if nonKings.count == 1, (nonKings[0].type == .bishop || nonKings[0].type == .knight) { return true }
-        if nonKings.count == 2, nonKings.allSatisfy({ $0.type == .bishop }) { return true }
-        return false
+        var minors: [(type: PieceType, squareColor: Int)] = []
+        for r in 0..<8 {
+            for c in 0..<8 {
+                guard let p = board[r][c], p.type != .king else { continue }
+                if p.type != .bishop && p.type != .knight { return false }
+                minors.append((p.type, (r + c) % 2))
+            }
+        }
+        if minors.count <= 1 { return true } // K vs K, or K + single minor vs K
+        // Any number of bishops, all on the same square color, can never deliver mate.
+        return minors.allSatisfy { $0.type == .bishop && $0.squareColor == minors[0].squareColor }
     }
 
     func gameStatusText() -> GameStatus {

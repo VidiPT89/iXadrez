@@ -186,10 +186,15 @@ enum ChessAI {
                     results.append((move, score))
                     if Date() > deadline { break }
                 }
-                results.sort { $0.score > $1.score }
-                currentOrder = results.map { $0.move }
-                scored = results
-                if Date() > deadline { break }
+                // An iteration cut short by the deadline holds truncated (unreliable) scores and is
+                // missing moves — keep the last completed depth instead, unless there is nothing else yet.
+                let complete = results.count == currentOrder.count && Date() <= deadline
+                if complete || scored.isEmpty {
+                    results.sort { $0.score > $1.score }
+                    currentOrder = results.map { $0.move }
+                    scored = results
+                }
+                if !complete { break }
             }
         } else {
             for move in orderMoves(rootMoves, game) {

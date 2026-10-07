@@ -9,7 +9,8 @@ private struct Lesson {
     func text(_ lang: AppLanguage) -> String { lang == .pt ? textPt : textEn }
 }
 
-private func customGame(_ pieces: [(String, PieceType, PieceColor)], turn: PieceColor = .white) -> ChessGame {
+private func customGame(_ pieces: [(String, PieceType, PieceColor)], turn: PieceColor = .white,
+                        castling: CastlingRights = CastlingRights(wK: false, wQ: false, bK: false, bQ: false)) -> ChessGame {
     var board: Board = Array(repeating: Array(repeating: nil, count: 8), count: 8)
     let files = Array("abcdefgh")
     for (square, type, color) in pieces {
@@ -21,7 +22,7 @@ private func customGame(_ pieces: [(String, PieceType, PieceColor)], turn: Piece
     let g = ChessGame()
     g.board = board
     g.turn = turn
-    g.castling = CastlingRights(wK: false, wQ: false, bK: false, bQ: false)
+    g.castling = castling
     g.enPassant = nil
     g.history = []
     return g
@@ -36,9 +37,10 @@ private let lessons: [Lesson] = [
     ),
     Lesson(
         titlePt: "2. Regras especiais", titleEn: "2. Special rules",
-        textPt: "O roque move o rei duas casas em direção à torre (e a torre salta para o outro lado do rei), desde que nenhum dos dois se tenha mexido e as casas entre eles estejam livres e fora de ataque.\n\nO en passant permite a um peão capturar um peão adversário que acabou de avançar duas casas, como se tivesse avançado só uma.\n\nUm peão que chega à última fileira é promovido — normalmente a dama.\n\nXeque é quando o rei está sob ataque; xeque-mate é quando não há forma de escapar; afogamento é quando o jogador não tem lances legais mas não está em xeque — resulta em empate.",
-        textEn: "Castling moves the king two squares toward a rook (and the rook jumps to the other side of the king), as long as neither has moved and the squares between them are empty and not under attack.\n\nEn passant lets a pawn capture an enemy pawn that just advanced two squares, as if it had only moved one.\n\nA pawn reaching the last rank is promoted — usually to a queen.\n\nCheck is when the king is under attack; checkmate is when there is no way to escape; stalemate is when a player has no legal move but isn't in check — the game is a draw.",
-        setup: { customGame([("e1", .king, .white), ("h1", .rook, .white), ("a1", .rook, .white), ("e8", .king, .black)]) }
+        textPt: "O roque move o rei duas casas em direção à torre (e a torre salta para o outro lado do rei), desde que nenhum dos dois se tenha mexido e as casas entre eles estejam livres e fora de ataque.\n\nO en passant permite a um peão capturar um peão adversário que acabou de avançar duas casas, como se tivesse avançado só uma.\n\nUm peão que chega à última fileira é promovido — normalmente a dama.\n\nXeque é quando o rei está sob ataque; xeque-mate é quando não há forma de escapar; afogamento é quando o jogador não tem lances legais mas não está em xeque — resulta em empate.\n\nToca no rei para veres o roque para os dois lados.",
+        textEn: "Castling moves the king two squares toward a rook (and the rook jumps to the other side of the king), as long as neither has moved and the squares between them are empty and not under attack.\n\nEn passant lets a pawn capture an enemy pawn that just advanced two squares, as if it had only moved one.\n\nA pawn reaching the last rank is promoted — usually to a queen.\n\nCheck is when the king is under attack; checkmate is when there is no way to escape; stalemate is when a player has no legal move but isn't in check — the game is a draw.\n\nTap the king to see castling on both sides.",
+        setup: { customGame([("e1", .king, .white), ("h1", .rook, .white), ("a1", .rook, .white), ("e8", .king, .black)],
+                                castling: CastlingRights(wK: true, wQ: true, bK: false, bQ: false)) }
     ),
     Lesson(
         titlePt: "3. Princípios de abertura", titleEn: "3. Opening principles",
@@ -48,9 +50,9 @@ private let lessons: [Lesson] = [
     ),
     Lesson(
         titlePt: "4. Táticas básicas", titleEn: "4. Basic tactics",
-        textPt: "Garfo: uma peça ataca duas peças adversárias ao mesmo tempo (o cavalo é excelente nisto). Cravo: uma peça não se pode mover porque exporia uma peça mais valiosa atrás dela. Espeto: como o cravo, mas a peça mais valiosa está à frente e é forçada a mover-se, expondo a de trás. Ataque descoberto: mover uma peça revela o ataque de outra peça escondida atrás.\n\nToca no cavalo para veres um exemplo de garfo neste tabuleiro.",
-        textEn: "Fork: one piece attacks two enemy pieces at once (the knight is excellent at this). Pin: a piece can't move because it would expose a more valuable piece behind it. Skewer: like a pin, but the more valuable piece is in front and forced to move, exposing the one behind it. Discovered attack: moving one piece reveals an attack from another piece hidden behind it.\n\nTap the knight to see a fork example on this board.",
-        setup: { customGame([("e5", .knight, .white), ("d7", .king, .black), ("f7", .rook, .black)]) }
+        textPt: "Garfo: uma peça ataca duas peças adversárias ao mesmo tempo (o cavalo é excelente nisto). Cravo: uma peça não se pode mover porque exporia uma peça mais valiosa atrás dela. Espeto: como o cravo, mas a peça mais valiosa está à frente e é forçada a mover-se, expondo a de trás. Ataque descoberto: mover uma peça revela o ataque de outra peça escondida atrás.\n\nJoga o cavalo para e5 e repara: ataca o rei e a torre ao mesmo tempo — um garfo.",
+        textEn: "Fork: one piece attacks two enemy pieces at once (the knight is excellent at this). Pin: a piece can't move because it would expose a more valuable piece behind it. Skewer: like a pin, but the more valuable piece is in front and forced to move, exposing the one behind it. Discovered attack: moving one piece reveals an attack from another piece hidden behind it.\n\nMove the knight to e5 and notice it attacks the king and the rook at once — a fork.",
+        setup: { customGame([("c4", .knight, .white), ("g1", .king, .white), ("d7", .king, .black), ("f7", .rook, .black)]) }
     ),
     Lesson(
         titlePt: "5. Finais básicos", titleEn: "5. Basic endgames",

@@ -45,7 +45,7 @@ private let strings: [AppLanguage: [String: String]] = [
         "resultCheckmateTitle": "Xeque-mate!",
         "resultCheckmateWhite": "As Brancas vencem.",
         "resultCheckmateBlack": "As Pretas vencem.",
-        "resultStalemateTitle": "Tabuada por Afogamento",
+        "resultStalemateTitle": "Empate por Afogamento",
         "resultStalemateText": "Nenhum jogador tem lances legais. O jogo termina empatado.",
         "resultDraw50Title": "Empate",
         "resultDraw50Text": "50 lances sem capturas nem movimento de peão.",

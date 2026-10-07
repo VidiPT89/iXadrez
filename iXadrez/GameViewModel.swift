@@ -43,6 +43,7 @@ final class GameViewModel: ObservableObject {
         onLocalMove = nil
         requestToken = UUID()
         game = ChessGame()
+        flipped = networkColor == .black
         pieces = PieceInstance.fresh(from: game.board)
         selected = nil
         legalTargets = []

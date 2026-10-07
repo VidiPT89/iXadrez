@@ -33,7 +33,7 @@ final class MultiplayerViewModel: ObservableObject {
         Task {
             do {
                 _ = try await service.createRoom()
-                gameVM.networkColor = service.myColor
+                seat(gameVM)
                 waitingForOpponent = true
             } catch {
                 errorMessage = Self.message(for: error)
@@ -47,7 +47,7 @@ final class MultiplayerViewModel: ObservableObject {
         Task {
             do {
                 _ = try await service.joinRoom(code)
-                gameVM.networkColor = service.myColor
+                seat(gameVM)
                 onReady()
             } catch {
                 errorMessage = Self.message(for: error)
@@ -66,7 +66,7 @@ final class MultiplayerViewModel: ObservableObject {
         Task {
             do {
                 let result = try await service.quickPlay()
-                gameVM.networkColor = service.myColor
+                seat(gameVM)
                 if result.isHost {
                     waitingForOpponent = true
                 } else {
@@ -76,6 +76,12 @@ final class MultiplayerViewModel: ObservableObject {
                 errorMessage = Self.message(for: error)
             }
         }
+    }
+
+    /// Records my color and puts my pieces at the bottom of the board — the guest plays Black.
+    private func seat(_ gameVM: GameViewModel) {
+        gameVM.networkColor = service.myColor
+        gameVM.flipped = service.myColor == .black
     }
 
     func leave() {

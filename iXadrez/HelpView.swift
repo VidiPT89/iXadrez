@@ -20,13 +20,13 @@ private let helpBlocks: [HelpBlock] = [
     ),
     HelpBlock(
         titlePt: "Modos de jogo", titleEn: "Game modes",
-        bodyPt: "• 1 vs 1 — dois jogadores alternam turnos no mesmo dispositivo.\n• Contra o Bot — escolhe entre 4 níveis de dificuldade (Iniciante a Difícil); jogas sempre com as Brancas e o bot joga com as Pretas.\n• Tutorial — lições passo-a-passo sobre movimentação, regras especiais, aberturas, táticas e finais.",
-        bodyEn: "• 1 vs 1 — two players take turns on the same device.\n• Vs Bot — choose between 4 difficulty levels (Beginner to Hard); you always play White and the bot plays Black.\n• Tutorial — step-by-step lessons on piece movement, special rules, openings, tactics and endgames."
+        bodyPt: "• 1 vs 1 — dois jogadores alternam turnos no mesmo dispositivo.\n• Contra o Bot — escolhe entre 4 níveis de dificuldade (Iniciante a Difícil); jogas sempre com as Brancas e o bot joga com as Pretas.\n• Multijogador — joga online com um amigo: Jogo Rápido (sem código), criar uma sala e partilhar o código, ou entrar com um código. Inclui chat.\n• Tutorial — lições passo-a-passo sobre movimentação, regras especiais, aberturas, táticas e finais.",
+        bodyEn: "• 1 vs 1 — two players take turns on the same device.\n• Vs Bot — choose between 4 difficulty levels (Beginner to Hard); you always play White and the bot plays Black.\n• Multiplayer — play online with a friend: Quick Play (no code), create a room and share its code, or join with a code. Includes chat.\n• Tutorial — step-by-step lessons on piece movement, special rules, openings, tactics and endgames."
     ),
     HelpBlock(
         titlePt: "Controlos", titleEn: "Controls",
-        bodyPt: "Inverter — roda o tabuleiro 180°.\nNovo Jogo — reinicia a partida atual.\nMenu — volta ao menu principal.\n🔊 — liga/desliga o som.\n🇵🇹/🇬🇧 — muda o idioma entre Português e Inglês.",
-        bodyEn: "Flip — rotates the board 180°.\nNew Game — restarts the current match.\nMenu — returns to the main menu.\n🔊 — toggles sound on/off.\n🇵🇹/🇬🇧 — switches the language between Portuguese and English."
+        bodyPt: "Inverter — roda o tabuleiro 180°.\nVoltar Atrás / Avançar — desfaz ou refaz a tua última jogada (Contra o Bot).\nDesistir — abandona a partida (Multijogador).\nNovo Jogo — reinicia a partida atual.\nMenu — volta ao menu principal.\n🔊 — liga/desliga o som.\n🇵🇹/🇬🇧 — muda o idioma entre Português e Inglês.",
+        bodyEn: "Flip — rotates the board 180°.\nUndo / Redo — takes back or replays your last move (Vs Bot).\nResign — concedes the game (Multiplayer).\nNew Game — restarts the current match.\nMenu — returns to the main menu.\n🔊 — toggles sound on/off.\n🇵🇹/🇬🇧 — switches the language between Portuguese and English."
     ),
 ]
 
