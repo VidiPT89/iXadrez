@@ -30,15 +30,28 @@
 		C075DCB7983950427F4E857E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8F1C4FCEE3DB730A7A206DCD /* GoogleService-Info.plist */; };
 		D040358F387D299CDAA80C4A /* ChessAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53749EBDA35DA3FF7607E331 /* ChessAI.swift */; };
 		D1D0081AFC7D015FFE67EA31 /* ChessEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9038AB5C682B7203B812CADE /* ChessEngine.swift */; };
+		EE4E616F554D71DE29F87A91 /* ChessEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4A82C2A0607D34D6A4C92D /* ChessEngineTests.swift */; };
 		FD3B1AD080518BD13119907C /* iXadrezApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1F4AB7CA5015A0DD50DDAE /* iXadrezApp.swift */; };
 		FDCEAD3A26F9F3095614945F /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA4EE63C9220A8F4240CD7E /* MainMenuView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B8AA3D8BB27E81DB3588B802 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AD35E3D3D46B4A409FD2DEFC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B29F9A9960F22BA6647C829D;
+			remoteInfo = iXadrez;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		08B6B201DB12C2F0D8ABE7DA /* iXadrezTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = iXadrezTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		120007563972E39D33D16EC9 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		343B944503A26D4075A72B70 /* ChessBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessBoardView.swift; sourceTree = "<group>"; };
 		3B784440F6056C3FEA20210B /* Sora-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sora-Regular.ttf"; sourceTree = "<group>"; };
 		4164BBD1286568CEDE31CB33 /* Sora-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sora-ExtraBold.ttf"; sourceTree = "<group>"; };
+		4D4A82C2A0607D34D6A4C92D /* ChessEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessEngineTests.swift; sourceTree = "<group>"; };
 		53749EBDA35DA3FF7607E331 /* ChessAI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessAI.swift; sourceTree = "<group>"; };
 		54BD15D390EC3A6EF0A6F8C7 /* Sora-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sora-Bold.ttf"; sourceTree = "<group>"; };
 		63E197FD14DB8AB5233106E5 /* Sora-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sora-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -48,7 +61,7 @@
 		7A183396A009214E471C8424 /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
 		8F1C4FCEE3DB730A7A206DCD /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9038AB5C682B7203B812CADE /* ChessEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessEngine.swift; sourceTree = "<group>"; };
-		9148F34EBAEB447922365A6A /* iXadrez.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iXadrez.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9148F34EBAEB447922365A6A /* iXadrez.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = iXadrez.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		99E5AC21796F9C2EF320F970 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A27F9941C19DFE081E56FE49 /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		A2824069D008A4B702A8F122 /* SoundEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundEngine.swift; sourceTree = "<group>"; };
@@ -74,6 +87,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		342FBC34AD7971A9888DACE7 /* iXadrezTests */ = {
+			isa = PBXGroup;
+			children = (
+				4D4A82C2A0607D34D6A4C92D /* ChessEngineTests.swift */,
+			);
+			path = iXadrezTests;
+			sourceTree = "<group>";
+		};
 		6ED157797B4FD66D3F8268E8 /* iXadrez */ = {
 			isa = PBXGroup;
 			children = (
@@ -104,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				9148F34EBAEB447922365A6A /* iXadrez.app */,
+				08B6B201DB12C2F0D8ABE7DA /* iXadrezTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -124,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				6ED157797B4FD66D3F8268E8 /* iXadrez */,
+				342FBC34AD7971A9888DACE7 /* iXadrezTests */,
 				C8B98DD2140D7D3F14B1D03B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -152,6 +175,24 @@
 			productReference = 9148F34EBAEB447922365A6A /* iXadrez.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D98F1A870D719C00FABC8DB7 /* iXadrezTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B949B23B6638C0D0EA1EDF99 /* Build configuration list for PBXNativeTarget "iXadrezTests" */;
+			buildPhases = (
+				BB45B604FCF1921C6F1817F7 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3A4286FB57C84E815A21BE91 /* PBXTargetDependency */,
+			);
+			name = iXadrezTests;
+			packageProductDependencies = (
+			);
+			productName = iXadrezTests;
+			productReference = 08B6B201DB12C2F0D8ABE7DA /* iXadrezTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -162,7 +203,11 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					B29F9A9960F22BA6647C829D = {
+						DevelopmentTeam = S769436W24;
 						ProvisioningStyle = Automatic;
+					};
+					D98F1A870D719C00FABC8DB7 = {
+						DevelopmentTeam = S769436W24;
 					};
 				};
 			};
@@ -184,6 +229,7 @@
 			projectRoot = "";
 			targets = (
 				B29F9A9960F22BA6647C829D /* iXadrez */,
+				D98F1A870D719C00FABC8DB7 /* iXadrezTests */,
 			);
 		};
 /* End PBXProject section */
@@ -229,7 +275,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BB45B604FCF1921C6F1817F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE4E616F554D71DE29F87A91 /* ChessEngineTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3A4286FB57C84E815A21BE91 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B29F9A9960F22BA6647C829D /* iXadrez */;
+			targetProxy = B8AA3D8BB27E81DB3588B802 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		46F23CF5F3DCFBF36CF2D2B3 /* Release */ = {
@@ -288,6 +350,26 @@
 			};
 			name = Release;
 		};
+		5EA07C7A1EF8113E1F41FE87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = S769436W24;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.vidi.iXadrezTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iXadrez.app/iXadrez";
+			};
+			name = Release;
+		};
 		C1E052CE2F8167FCD6277AF3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -327,6 +409,26 @@
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EFEBE0790389376ECC683ABE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = S769436W24;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.vidi.iXadrezTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iXadrez.app/iXadrez";
 			};
 			name = Debug;
 		};
@@ -401,6 +503,15 @@
 			buildConfigurations = (
 				F6F7AB6861D38EB6C49EA446 /* Debug */,
 				46F23CF5F3DCFBF36CF2D2B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B949B23B6638C0D0EA1EDF99 /* Build configuration list for PBXNativeTarget "iXadrezTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EFEBE0790389376ECC683ABE /* Debug */,
+				5EA07C7A1EF8113E1F41FE87 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

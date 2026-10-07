@@ -85,7 +85,8 @@ struct GameView: View {
             HStack {
                 Text(loc.t("chatTitle")).font(Theme.sora(12, weight: .bold)).foregroundColor(Theme.inkDim).textCase(.uppercase)
                 Spacer()
-                Text(mp.opponentOnline ? loc.t("mpOpponentOnline") : loc.t("mpOpponentOffline"))
+                Text(loc.t(mp.opponentOnline ? "mpOpponentOnline" : "mpOpponentOffline")
+                        .replacingOccurrences(of: "{name}", with: mp.opponentName.isEmpty ? loc.t("mpOpponent") : mp.opponentName))
                     .font(Theme.sora(11))
                     .foregroundColor(mp.opponentOnline ? Color.green : Theme.inkDim)
             }
@@ -125,9 +126,20 @@ struct GameView: View {
         min(UIScreen.main.bounds.width - 40, 460)
     }
 
+    /// "Brancas"/"Pretas" locally; in multiplayer, the players' names, mine marked "(tu)".
+    private func playerLabel(for color: PieceColor) -> String {
+        guard vm.mode == .multiplayer, let myColor = vm.networkColor else {
+            return loc.t(color == .white ? "whitePlayer" : "blackPlayer")
+        }
+        if color == myColor {
+            return "\(mp.myName.isEmpty ? loc.t("mpDefaultName") : mp.myName) \(loc.t("mpYouSuffix"))"
+        }
+        return mp.opponentName.isEmpty ? loc.t("mpOpponent") : mp.opponentName
+    }
+
     private func playerTag(color: PieceColor) -> some View {
         let active = vm.game.turn == color && !vm.statusText.over
-        return Text(color == .white ? loc.t("whitePlayer") : loc.t("blackPlayer"))
+        return Text(playerLabel(for: color))
             .font(Theme.sora(14, weight: .semibold))
             .padding(.horizontal, 16).padding(.vertical, 6)
             .background(Capsule().fill(Theme.panel).overlay(Capsule().stroke(active ? Theme.gold : Theme.panelBorder, lineWidth: 1)))
@@ -269,8 +281,15 @@ struct GameView: View {
             Text(title).font(Theme.sora(22, weight: .bold)).foregroundColor(Theme.goldSoft)
             Text(text).font(Theme.sora(15)).foregroundColor(Theme.inkDim).multilineTextAlignment(.center)
             HStack(spacing: 10) {
-                Button(loc.t("newGame")) { vm.showResult = false; vm.newGame(mode: vm.mode, level: vm.botLevel) }.buttonStyle(GhostButtonStyle())
-                Button(loc.t("backToMenu")) { vm.showResult = false; onBackToMenu() }.buttonStyle(GhostButtonStyle())
+                // An online match can't be restarted in place — the room is over.
+                if vm.mode != .multiplayer {
+                    Button(loc.t("newGame")) { vm.showResult = false; vm.newGame(mode: vm.mode, level: vm.botLevel) }.buttonStyle(GhostButtonStyle())
+                }
+                Button(loc.t("backToMenu")) {
+                    vm.showResult = false
+                    if vm.mode == .multiplayer { mp.leaveRoom() }
+                    onBackToMenu()
+                }.buttonStyle(GhostButtonStyle())
             }
         }
         .padding(32)

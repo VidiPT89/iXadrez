@@ -33,6 +33,21 @@ final class MultiplayerService: ObservableObject {
     @Published private(set) var myColor: PieceColor? = nil
     @Published private(set) var opponentOnline: Bool = false
     @Published private(set) var chatMessages: [ChatMessage] = []
+    /// The opponent's display name; "" until their client sends one.
+    @Published private(set) var opponentName: String = ""
+    /// My display name, sent inside my presence map.
+    var myName: String = "" {
+        didSet { myName = Self.cleanName(myName) } // assigning inside didSet doesn't re-trigger it
+    }
+
+    static let maxNameLength = 20
+
+    /// Trims, collapses whitespace and drops control characters; "" when nothing usable is left.
+    static func cleanName(_ raw: String?) -> String {
+        let noControl = String((raw ?? "").unicodeScalars.filter { !CharacterSet.controlCharacters.contains($0) }.map(Character.init))
+        let collapsed = noControl.split(whereSeparator: { $0.isWhitespace }).joined(separator: " ")
+        return String(collapsed.prefix(maxNameLength))
+    }
 
     var onRemoteMove: ((Square, Square, PieceType?) -> Void)? = nil
     var onOpponentJoined: (() -> Void)? = nil
@@ -41,6 +56,11 @@ final class MultiplayerService: ObservableObject {
     private var myUid: String? = nil
     private var role: String? = nil // "host" | "guest"
     private var appliedPly: Int = -1
+    /// Plies this session wrote — only those are already on the local board.
+    private var sentPlies = Set<Int>()
+    /// Lobby rooms get recycled; docs older than this belong to a previous game.
+    private var roomCreatedAt: Date = .distantPast
+    private var finishedNotified = false
     private var roomListener: ListenerRegistration? = nil
     private var movesListener: ListenerRegistration? = nil
     private var chatListener: ListenerRegistration? = nil
@@ -75,7 +95,7 @@ final class MultiplayerService: ObservableObject {
             "hostUid": hostUid, "hostColor": "w", "guestUid": NSNull(),
             "status": "waiting", "result": NSNull(),
             "createdAt": FieldValue.serverTimestamp(), "updatedAt": FieldValue.serverTimestamp(),
-            "hostPresence": ["online": true, "lastSeen": FieldValue.serverTimestamp()],
+            "hostPresence": presenceValue(online: true),
             "guestPresence": ["online": false, "lastSeen": FieldValue.serverTimestamp()],
         ]
     }
@@ -99,7 +119,7 @@ final class MultiplayerService: ObservableObject {
             do {
                 try await db().collection("rooms").document(code).updateData([
                     "guestUid": uid, "status": "active",
-                    "guestPresence": ["online": true, "lastSeen": FieldValue.serverTimestamp()],
+                    "guestPresence": presenceValue(online: true),
                     "updatedAt": FieldValue.serverTimestamp(),
                 ])
             } catch {
@@ -111,8 +131,16 @@ final class MultiplayerService: ObservableObject {
             throw MultiplayerError.roomFull
         }
 
+        // Read back the stored createdAt (a server timestamp) so listeners can skip leftovers from
+        // a previous game in this room.
+        let fresh = try? await db().collection("rooms").document(code).getDocument()
+        roomCreatedAt = (fresh?.data()?["createdAt"] as? Timestamp)?.dateValue() ?? .distantPast
+
         roomCode = code
         appliedPly = -1
+        sentPlies = []
+        finishedNotified = false
+        opponentName = ""
         sawGuest = guestUid != nil || role == "guest"
         opponentOnline = false
         lastOppPresence = nil
@@ -210,10 +238,15 @@ final class MultiplayerService: ObservableObject {
             sawGuest = true
             onOpponentJoined?()
         }
-        if let status = data["status"] as? String, status == "finished", let result = data["result"] as? String {
+        if let status = data["status"] as? String, status == "finished", let result = data["result"] as? String, !finishedNotified {
+            finishedNotified = true
             onGameFinished?(result)
         }
         lastOppPresence = (role == "host" ? data["guestPresence"] : data["hostPresence"]) as? [String: Any]
+        // The name rides inside the presence map (the room's security rules reject new top-level
+        // fields). Older clients rewrite presence without it, so keep the last name we saw.
+        let oppName = Self.cleanName(lastOppPresence?["name"] as? String)
+        if !oppName.isEmpty, oppName != opponentName { opponentName = oppName }
         recomputePresence()
     }
 
@@ -233,7 +266,8 @@ final class MultiplayerService: ObservableObject {
             .addSnapshotListener { [weak self] snap, _ in
                 guard let self, let changes = snap?.documentChanges else { return }
                 Task { @MainActor in
-                    for change in changes where change.type == .added {
+                    // .modified too: in a recycled room a new move can overwrite an old game's doc for that ply.
+                    for change in changes where change.type != .removed {
                         self.handleMoveDoc(change.document.data())
                     }
                 }
@@ -241,14 +275,22 @@ final class MultiplayerService: ObservableObject {
     }
 
     private func handleMoveDoc(_ d: [String: Any]) {
-        guard let ply = d["ply"] as? Int, ply > appliedPly else { return }
+        guard let ply = d["ply"] as? Int, ply > appliedPly, !isStale(d["playedAt"]) else { return }
         appliedPly = ply
-        if (d["by"] as? String) == myUid { return } // my own move, applied locally already
+        // My own move from this session is already on the board; after a relaunch it isn't, so replay it.
+        if sentPlies.contains(ply) { return }
         guard let fromMap = d["from"] as? [String: Any], let toMap = d["to"] as? [String: Any],
               let fr = fromMap["r"] as? Int, let fc = fromMap["c"] as? Int,
               let tr = toMap["r"] as? Int, let tc = toMap["c"] as? Int else { return }
         let promotion = (d["promotion"] as? String).flatMap { PieceType(rawValue: $0) }
         onRemoteMove?(Square(r: fr, c: fc), Square(r: tr, c: tc), promotion)
+    }
+
+    /// True for docs written before the current game began. A nil timestamp is a still-pending
+    /// local write, which is by definition current.
+    private func isStale(_ ts: Any?) -> Bool {
+        guard let ts = ts as? Timestamp else { return false }
+        return ts.dateValue() < roomCreatedAt
     }
 
     private func attachChatListener() {
@@ -261,6 +303,7 @@ final class MultiplayerService: ObservableObject {
                 Task { @MainActor in
                     for change in changes where change.type == .added {
                         let d = change.document.data()
+                        if self.isStale(d["sentAt"]) { continue }
                         guard let uid = d["uid"] as? String, let text = d["text"] as? String else { continue }
                         self.chatMessages.append(ChatMessage(uid: uid, text: text, mine: uid == self.myUid))
                     }
@@ -270,10 +313,16 @@ final class MultiplayerService: ObservableObject {
 
     private func presenceField() -> String { role == "host" ? "hostPresence" : "guestPresence" }
 
+    private func presenceValue(online: Bool) -> [String: Any] {
+        var value: [String: Any] = ["online": online, "lastSeen": FieldValue.serverTimestamp()]
+        if !myName.isEmpty { value["name"] = myName }
+        return value
+    }
+
     private func sendHeartbeat(online: Bool) {
         guard let code = roomCode else { return }
         db().collection("rooms").document(code).updateData([
-            presenceField(): ["online": online, "lastSeen": FieldValue.serverTimestamp()],
+            presenceField(): presenceValue(online: online),
             "updatedAt": FieldValue.serverTimestamp(),
         ])
     }
@@ -290,6 +339,7 @@ final class MultiplayerService: ObservableObject {
         guard let code = roomCode, let uid = myUid else { return }
         let ply = appliedPly + 1
         let plyId = String(format: "%04d", ply)
+        sentPlies.insert(ply)
         db().collection("rooms").document(code).collection("moves").document(plyId).setData([
             "ply": ply,
             "from": ["r": from.r, "c": from.c],
@@ -316,6 +366,15 @@ final class MultiplayerService: ObservableObject {
         ])
     }
 
+    /// Marks the room finished after a rules ending (e.g. "checkmate-w", "stalemate"), so a Quick
+    /// Play slot frees up at once instead of waiting for both presences to go stale.
+    func finishGame(result: String) {
+        guard let code = roomCode else { return }
+        db().collection("rooms").document(code).updateData([
+            "status": "finished", "result": result, "updatedAt": FieldValue.serverTimestamp(),
+        ])
+    }
+
     func leaveRoom() {
         sendHeartbeat(online: false)
         roomListener?.remove(); roomListener = nil
@@ -327,6 +386,10 @@ final class MultiplayerService: ObservableObject {
         role = nil
         myColor = nil
         appliedPly = -1
+        sentPlies = []
+        roomCreatedAt = .distantPast
+        finishedNotified = false
+        opponentName = ""
         opponentOnline = false
         lastOppPresence = nil
         sawGuest = false

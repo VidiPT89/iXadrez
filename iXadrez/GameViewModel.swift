@@ -113,15 +113,16 @@ final class GameViewModel: ObservableObject {
         else if wasCapture { SoundEngine.shared.playCapture() }
         else { SoundEngine.shared.playMove() }
 
+        // Broadcast before the game-over check, or a mating move would never reach the opponent.
+        if isLocal, mode == .multiplayer {
+            onLocalMove?(record)
+        }
         if game.isGameOver {
             showResult = true
             return
         }
         if mode == .bot, game.turn == Self.botColor {
             requestBotMove()
-        }
-        if isLocal, mode == .multiplayer {
-            onLocalMove?(record)
         }
     }
 

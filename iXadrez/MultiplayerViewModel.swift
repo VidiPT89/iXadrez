@@ -8,21 +8,40 @@ final class MultiplayerViewModel: ObservableObject {
     let service = MultiplayerService.shared
     @Published var errorMessage: String? = nil
     @Published var waitingForOpponent = false
+    /// What the player typed in the lobby (may be blank — the default name is used then).
+    @Published var playerName: String = UserDefaults.standard.string(forKey: MultiplayerViewModel.nameKey) ?? ""
+
+    private static let nameKey = "playerName"
+
+    /// Called before any room action: remembers the typed name and hands it to the service.
+    private func commitPlayerName() {
+        playerName = MultiplayerService.cleanName(playerName)
+        UserDefaults.standard.set(playerName, forKey: Self.nameKey)
+        service.myName = playerName.isEmpty ? Loc.shared.t("mpDefaultName") : playerName
+    }
 
     private func begin(gameVM: GameViewModel) {
         service.onRemoteMove = { [weak gameVM] from, to, promotion in
             gameVM?.applyRemoteMove(from: from, to: to, promotion: promotion)
         }
         service.onGameFinished = { [weak gameVM] result in
+            // Checkmate/draw endings are detected by the local engine, which already shows them.
+            guard result.hasPrefix("resign-") else { return }
             gameVM?.multiplayerResult = result
         }
         gameVM.newGame(mode: .multiplayer, networkColor: nil)
-        gameVM.onLocalMove = { [weak self] record in
-            self?.service.sendMove(from: record.from, to: record.to, promotion: record.promotion)
+        gameVM.onLocalMove = { [weak self, weak gameVM] record in
+            guard let self else { return }
+            self.service.sendMove(from: record.from, to: record.to, promotion: record.promotion)
+            // Whoever played the final move records the ending, which also frees a Quick Play slot.
+            if let game = gameVM?.game, let ending = Self.endingCode(game) {
+                self.service.finishGame(result: ending)
+            }
         }
     }
 
     func createRoom(gameVM: GameViewModel, onReady: @escaping () -> Void) {
+        commitPlayerName()
         begin(gameVM: gameVM)
         errorMessage = nil
         waitingForOpponent = false
@@ -42,6 +61,7 @@ final class MultiplayerViewModel: ObservableObject {
     }
 
     func joinRoom(_ code: String, gameVM: GameViewModel, onReady: @escaping () -> Void) {
+        commitPlayerName()
         begin(gameVM: gameVM)
         errorMessage = nil
         Task {
@@ -56,6 +76,7 @@ final class MultiplayerViewModel: ObservableObject {
     }
 
     func quickPlay(gameVM: GameViewModel, onReady: @escaping () -> Void) {
+        commitPlayerName()
         begin(gameVM: gameVM)
         errorMessage = nil
         waitingForOpponent = false
@@ -82,6 +103,18 @@ final class MultiplayerViewModel: ObservableObject {
     private func seat(_ gameVM: GameViewModel) {
         gameVM.networkColor = service.myColor
         gameVM.flipped = service.myColor == .black
+    }
+
+    /// "checkmate-w", "stalemate", "draw-50"… — the same codes the web version writes.
+    private static func endingCode(_ game: ChessGame) -> String? {
+        switch game.result {
+        case .checkmate: return "checkmate-" + (game.winner?.rawValue ?? "")
+        case .stalemate: return "stalemate"
+        case .draw50: return "draw-50"
+        case .drawRepetition: return "draw-repetition"
+        case .drawMaterial: return "draw-material"
+        case .none: return nil
+        }
     }
 
     func leave() {

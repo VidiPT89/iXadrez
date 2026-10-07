@@ -17,7 +17,7 @@ A versão iOS nativa de [Xadrez para web](https://github.com/VidiPT89/Xadrez). X
 - 🔊 Efeitos sonoros sintetizados em tempo real via `AVAudioEngine` para lances, capturas, xeque e fim de jogo
 - 🎬 Splash de abertura animado com apresentação da app, que desaparece automaticamente
 - 🖼️ Tabuleiro totalmente adaptável (iPhone e iPad, portrait e landscape), com destaque de lances legais, última jogada e xeque
-- 🌐 Modo Multijogador — joga online com um amigo através de uma sala com código de 6 caracteres ou link de convite, com chat em tempo real, indicador de presença do adversário e desistência
+- 🌐 Modo Multijogador — joga online com um amigo: Jogo Rápido (sem código), sala com código de 6 caracteres ou link de convite, nome de jogador, chat em tempo real, indicador de presença do adversário e desistência (compatível com a versão web e Android)
 
 ## 🛠️ Tech Stack
 
@@ -51,6 +51,8 @@ iXadrez/
     ├── MultiplayerLobbyView.swift                # Criar/entrar numa sala, partilhar convite
     ├── GoogleService-Info.plist                   # Configuração do projeto Firebase (ver secção Multijogador)
     └── Assets.xcassets                             # Ícone da app
+└── iXadrezTests/
+    └── ChessEngineTests.swift   # Testes do motor (perft, empates, mate) e do bot
 ```
 
 ## ⚙️ Game Mechanics
@@ -92,6 +94,12 @@ open iXadrez.xcodeproj
 ```
 
 Requires Xcode 15+ and iOS 16+.
+
+Engine and bot tests (⌘U in Xcode, or from the command line):
+
+```bash
+xcodebuild test -project iXadrez.xcodeproj -scheme iXadrez -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+```
 
 ## 🌐 Multijogador
 

@@ -16,6 +16,10 @@ struct MultiplayerLobbyView: View {
         VStack(spacing: 18) {
             Text(loc.t("mpTitle")).font(Theme.sora(20, weight: .bold)).foregroundColor(Theme.ink)
 
+            if !mpVM.waitingForOpponent {
+                nameField
+            }
+
             if mpVM.waitingForOpponent {
                 waitingView
             } else if step == .join {
@@ -32,6 +36,26 @@ struct MultiplayerLobbyView: View {
         .frame(maxWidth: 480)
         .background(RoundedRectangle(cornerRadius: 16).fill(Theme.panel).overlay(RoundedRectangle(cornerRadius: 16).stroke(Theme.panelBorder, lineWidth: 1)))
         .padding(20)
+    }
+
+    private var nameField: some View {
+        VStack(spacing: 6) {
+            Text(loc.t("mpYourName")).font(Theme.sora(13)).foregroundColor(Theme.inkDim)
+            TextField(loc.t("mpNamePlaceholder"), text: $mpVM.playerName)
+                .textContentType(.nickname)
+                .disableAutocorrection(true)
+                .multilineTextAlignment(.center)
+                .font(Theme.sora(16))
+                .foregroundColor(Theme.ink)
+                .padding(10)
+                .frame(maxWidth: 260)
+                .background(RoundedRectangle(cornerRadius: 12).fill(Theme.bgSoft).overlay(RoundedRectangle(cornerRadius: 12).stroke(Theme.panelBorder, lineWidth: 1)))
+                .onChange(of: mpVM.playerName) { name in
+                    if name.count > MultiplayerService.maxNameLength {
+                        mpVM.playerName = String(name.prefix(MultiplayerService.maxNameLength))
+                    }
+                }
+        }
     }
 
     private var choiceView: some View {
