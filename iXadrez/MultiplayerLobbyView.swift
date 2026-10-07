@@ -43,6 +43,7 @@ struct MultiplayerLobbyView: View {
             Text(loc.t("mpYourName")).font(Theme.sora(13)).foregroundColor(Theme.inkDim)
             TextField(loc.t("mpNamePlaceholder"), text: $mpVM.playerName)
                 .textContentType(.nickname)
+                .accessibilityIdentifier("mp-name")
                 .disableAutocorrection(true)
                 .multilineTextAlignment(.center)
                 .font(Theme.sora(16))
@@ -71,25 +72,33 @@ struct MultiplayerLobbyView: View {
                 .buttonStyle(GhostButtonStyle())
                 .disabled(!MultiplayerService.configured)
                 Text(loc.t("mpQuickPlayDesc")).font(Theme.sora(12)).foregroundColor(Theme.inkDim).multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            HStack(spacing: 10) {
-                Button(loc.t("mpCreateRoom")) {
-                    isQuickPlayWaiting = false
-                    mpVM.createRoom(gameVM: gameVM, onReady: onReady)
-                }
-                .buttonStyle(GhostButtonStyle())
-                .disabled(!MultiplayerService.configured)
-
-                Button(loc.t("mpJoinRoom")) {
-                    mpVM.errorMessage = nil
-                    joinCode = ""
-                    step = .join
-                }
-                .buttonStyle(GhostButtonStyle())
-                .disabled(!MultiplayerService.configured)
+            // Side by side when they fit, stacked on narrow phones instead of truncating.
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 10) { roomButtons }
+                VStack(spacing: 10) { roomButtons }
             }
             Button(loc.t("cancelBtn")) { onBack() }.buttonStyle(GhostButtonStyle())
         }
+    }
+
+    @ViewBuilder
+    private var roomButtons: some View {
+        Button(loc.t("mpCreateRoom")) {
+            isQuickPlayWaiting = false
+            mpVM.createRoom(gameVM: gameVM, onReady: onReady)
+        }
+        .buttonStyle(GhostButtonStyle())
+        .disabled(!MultiplayerService.configured)
+
+        Button(loc.t("mpJoinRoom")) {
+            mpVM.errorMessage = nil
+            joinCode = ""
+            step = .join
+        }
+        .buttonStyle(GhostButtonStyle())
+        .disabled(!MultiplayerService.configured)
     }
 
     private var joinView: some View {

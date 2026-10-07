@@ -6,6 +6,8 @@ struct GameView: View {
     @ObservedObject var mp = MultiplayerService.shared
     @State private var chatText: String = ""
     @State private var showResignConfirm = false
+    @State private var showReportConfirm = false
+    @Environment(\.openURL) private var openURL
     var onBackToMenu: () -> Void
 
     var body: some View {
@@ -24,6 +26,8 @@ struct GameView: View {
                     onTap: { vm.tapSquare($0) }
                 )
                 .frame(width: boardSize, height: boardSize)
+                .accessibilityElement(children: .contain)
+                .accessibilityIdentifier("chess-board")
 
                 playerTag(color: vm.flipped ? .black : .white)
 
@@ -92,7 +96,7 @@ struct GameView: View {
             }
             ScrollView {
                 VStack(alignment: .leading, spacing: 6) {
-                    ForEach(mp.chatMessages) { msg in
+                    ForEach(mp.chatMessages.filter { $0.mine || !mp.opponentMuted }) { msg in
                         Text(msg.text)
                             .font(Theme.sora(13))
                             .padding(.horizontal, 10).padding(.vertical, 6)
@@ -102,6 +106,19 @@ struct GameView: View {
                 }
             }
             .frame(maxHeight: 160)
+            HStack(spacing: 8) {
+                Button(loc.t(mp.opponentMuted ? "chatUnmute" : "chatMute")) { mp.opponentMuted.toggle() }
+                    .font(Theme.sora(12))
+                    .foregroundColor(Theme.inkDim)
+                Spacer()
+                Button(loc.t("chatReport")) { showReportConfirm = true }
+                    .font(Theme.sora(12))
+                    .foregroundColor(Theme.danger)
+            }
+            .confirmationDialog(loc.t("chatReportConfirm"), isPresented: $showReportConfirm, titleVisibility: .visible) {
+                Button(loc.t("chatReport"), role: .destructive) { reportOpponent() }
+                Button(loc.t("cancelBtn"), role: .cancel) {}
+            }
             HStack(spacing: 8) {
                 TextField(loc.t("chatPlaceholder"), text: $chatText)
                     .padding(.horizontal, 12).padding(.vertical, 8)
@@ -122,8 +139,20 @@ struct GameView: View {
         .background(RoundedRectangle(cornerRadius: 16).fill(Theme.panel).overlay(RoundedRectangle(cornerRadius: 16).stroke(Theme.panelBorder, lineWidth: 1)))
     }
 
+    /// Mutes the opponent and opens a pre-filled report email with the room and recent messages.
+    private func reportOpponent() {
+        mp.opponentMuted = true
+        let theirs = mp.chatMessages.filter { !$0.mine }.map(\.text)
+        let name = mp.opponentName.isEmpty ? loc.t("mpOpponent") : mp.opponentName
+        if let url = ChatModeration.reportURL(roomCode: mp.roomCode, opponentName: name, recentMessages: theirs) {
+            openURL(url)
+        }
+    }
+
     private var boardSize: CGFloat {
-        min(UIScreen.main.bounds.width - 40, 460)
+        // Full width on phones; on iPad grow with the screen while leaving room for the panels below.
+        let screen = UIScreen.main.bounds
+        return min(screen.width - 40, screen.height * 0.55, 720)
     }
 
     /// "Brancas"/"Pretas" locally; in multiplayer, the players' names, mine marked "(tu)".

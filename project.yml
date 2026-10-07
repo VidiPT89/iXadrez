@@ -20,6 +20,7 @@ targets:
     scheme:
       testTargets:
         - iXadrezTests
+        - iXadrezUITests
     dependencies:
       - package: FirebaseSDK
         product: FirebaseAuth
@@ -36,9 +37,13 @@ targets:
           - UIInterfaceOrientationLandscapeRight
         UISupportedInterfaceOrientations~ipad:
           - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
         CFBundleDisplayName: "Xadrez"
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        ITSAppUsesNonExemptEncryption: false
         UIAppFonts:
           - Sora-Regular.ttf
           - Sora-SemiBold.ttf
@@ -64,6 +69,20 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.vidi.iXadrezTests
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: "5.0"
+        DEVELOPMENT_TEAM: S769436W24
+  iXadrezUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: iXadrezUITests
+    dependencies:
+      - target: iXadrez
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.vidi.iXadrezUITests
         GENERATE_INFOPLIST_FILE: YES
         SWIFT_VERSION: "5.0"
         DEVELOPMENT_TEAM: S769436W24

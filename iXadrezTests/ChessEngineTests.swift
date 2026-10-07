@@ -97,3 +97,24 @@ final class ChessEngineTests: XCTestCase {
         }
     }
 }
+
+final class ChatModerationTests: XCTestCase {
+    func testMasksOffensiveWordsOnly() {
+        XCTAssertEqual(ChatModeration.mask("és um IDIOTA!"), "és um •••")
+        XCTAssertEqual(ChatModeration.mask("what the fucking hell"), "what the ••• hell")
+        XCTAssertEqual(ChatModeration.mask("Estúpido"), "•••")
+    }
+
+    func testLeavesInnocentWordsAlone() {
+        // PT-PT: "bicha" is a queue and "puto" a kid; "Dickens"/"cockpit" only share a prefix.
+        for text in ["boa jogada!", "estou na bicha", "o puto ganhou", "Dickens e cockpit", "xeque-mate"] {
+            XCTAssertEqual(ChatModeration.mask(text), text)
+        }
+    }
+
+    func testReportURLIsAMailtoWithTheRoom() {
+        let url = ChatModeration.reportURL(roomCode: "ABC123", opponentName: "Ana", recentMessages: ["olá"])
+        XCTAssertEqual(url?.scheme, "mailto")
+        XCTAssertTrue(url?.absoluteString.contains("ABC123") ?? false)
+    }
+}

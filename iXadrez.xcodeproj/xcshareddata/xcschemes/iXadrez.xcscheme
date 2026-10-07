@@ -50,6 +50,17 @@
                ReferencedContainer = "container:iXadrez.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "52F4C47F1286E215A9E57258"
+               BuildableName = "iXadrezUITests.xctest"
+               BlueprintName = "iXadrezUITests"
+               ReferencedContainer = "container:iXadrez.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>

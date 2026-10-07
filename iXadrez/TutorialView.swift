@@ -106,7 +106,9 @@ struct TutorialView: View {
                     legalTargets: legalTargets,
                     onTap: tap
                 )
-                .frame(width: 320, height: 320)
+                .frame(width: lessonBoardSize, height: lessonBoardSize)
+                .accessibilityElement(children: .contain)
+                .accessibilityIdentifier("chess-board")
 
                 Text(loc.t("lessonHintClick")).font(Theme.sora(13)).foregroundColor(Theme.goldSoft)
 
@@ -142,5 +144,9 @@ struct TutorialView: View {
             selected = nil
             legalTargets = []
         }
+    }
+
+    private var lessonBoardSize: CGFloat {
+        min(UIScreen.main.bounds.width - 40, 520)
     }
 }

@@ -17,11 +17,14 @@
 		2286D8C928D1381E2E76A3B3 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FA862E5612C3419D8C62AE /* HelpView.swift */; };
 		26FC80C9EB5C6614F0891537 /* Sora-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 54BD15D390EC3A6EF0A6F8C7 /* Sora-Bold.ttf */; };
 		3657AE065B0B873334EC6A03 /* MultiplayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776954B10623092535D0E44C /* MultiplayerService.swift */; };
+		47ED8CFACEF1577E7292F458 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 5F951926F220F656F8D078CB /* PrivacyInfo.xcprivacy */; };
 		51469F59F6568A05C2130EF3 /* ChessBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343B944503A26D4075A72B70 /* ChessBoardView.swift */; };
 		6091793E2034EB27BECB9336 /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A18E8588D2A5CAE73A22A8 /* GameViewModel.swift */; };
+		60CA9F16B9A713FF634B4639 /* ChatModeration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40A768372ABB4D8D79E388B /* ChatModeration.swift */; };
 		648EB1B3EF9E0F18AB241066 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120007563972E39D33D16EC9 /* TutorialView.swift */; };
 		6FD66C12E89D0A4227A3CAE6 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27F9941C19DFE081E56FE49 /* Localization.swift */; };
 		7EBDC5E951DE0E1CAD20E252 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB83797392404B944C3FA3DF /* Theme.swift */; };
+		7FA5FDC1CF6025E093C68754 /* StoreScreenshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF7D111829741B9FFA8AD72 /* StoreScreenshots.swift */; };
 		825A6B0A7B94AE1C32D10652 /* MultiplayerLobbyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA281C3B872A022B72F2D27B /* MultiplayerLobbyView.swift */; };
 		A1F1032C5373A286B148010E /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7A183396A009214E471C8424 /* OFL.txt */; };
 		A529BFED6458F984FBCE5388 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 16FF32A475704283A5C61B3C /* FirebaseAuth */; };
@@ -36,6 +39,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		2E30455786DCFC64E598ADDC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AD35E3D3D46B4A409FD2DEFC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B29F9A9960F22BA6647C829D;
+			remoteInfo = iXadrez;
+		};
 		B8AA3D8BB27E81DB3588B802 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AD35E3D3D46B4A409FD2DEFC /* Project object */;
@@ -54,11 +64,13 @@
 		4D4A82C2A0607D34D6A4C92D /* ChessEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessEngineTests.swift; sourceTree = "<group>"; };
 		53749EBDA35DA3FF7607E331 /* ChessAI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessAI.swift; sourceTree = "<group>"; };
 		54BD15D390EC3A6EF0A6F8C7 /* Sora-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sora-Bold.ttf"; sourceTree = "<group>"; };
+		5F951926F220F656F8D078CB /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		63E197FD14DB8AB5233106E5 /* Sora-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sora-SemiBold.ttf"; sourceTree = "<group>"; };
 		6C1F4AB7CA5015A0DD50DDAE /* iXadrezApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iXadrezApp.swift; sourceTree = "<group>"; };
 		7256C8980E61889615CD76E9 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		776954B10623092535D0E44C /* MultiplayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerService.swift; sourceTree = "<group>"; };
 		7A183396A009214E471C8424 /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
+		885C330F29AA7672807BCFF3 /* iXadrezUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = iXadrezUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F1C4FCEE3DB730A7A206DCD /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9038AB5C682B7203B812CADE /* ChessEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessEngine.swift; sourceTree = "<group>"; };
 		9148F34EBAEB447922365A6A /* iXadrez.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = iXadrez.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +81,8 @@
 		AA281C3B872A022B72F2D27B /* MultiplayerLobbyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerLobbyView.swift; sourceTree = "<group>"; };
 		BB83797392404B944C3FA3DF /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		C4186E1FD73CEB9BAD967C12 /* MultiplayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerViewModel.swift; sourceTree = "<group>"; };
+		DBF7D111829741B9FFA8AD72 /* StoreScreenshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreScreenshots.swift; sourceTree = "<group>"; };
+		E40A768372ABB4D8D79E388B /* ChatModeration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModeration.swift; sourceTree = "<group>"; };
 		F39A81D67A8BA9828DA62EB2 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		F7FA862E5612C3419D8C62AE /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		FAA4EE63C9220A8F4240CD7E /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
@@ -87,6 +101,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2A0B068BF84B5F64C69FE8E7 /* iXadrezUITests */ = {
+			isa = PBXGroup;
+			children = (
+				DBF7D111829741B9FFA8AD72 /* StoreScreenshots.swift */,
+			);
+			path = iXadrezUITests;
+			sourceTree = "<group>";
+		};
 		342FBC34AD7971A9888DACE7 /* iXadrezTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -99,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				99E5AC21796F9C2EF320F970 /* Assets.xcassets */,
+				E40A768372ABB4D8D79E388B /* ChatModeration.swift */,
 				53749EBDA35DA3FF7607E331 /* ChessAI.swift */,
 				343B944503A26D4075A72B70 /* ChessBoardView.swift */,
 				9038AB5C682B7203B812CADE /* ChessEngine.swift */,
@@ -112,6 +135,7 @@
 				AA281C3B872A022B72F2D27B /* MultiplayerLobbyView.swift */,
 				776954B10623092535D0E44C /* MultiplayerService.swift */,
 				C4186E1FD73CEB9BAD967C12 /* MultiplayerViewModel.swift */,
+				5F951926F220F656F8D078CB /* PrivacyInfo.xcprivacy */,
 				A2824069D008A4B702A8F122 /* SoundEngine.swift */,
 				7256C8980E61889615CD76E9 /* SplashView.swift */,
 				BB83797392404B944C3FA3DF /* Theme.swift */,
@@ -126,6 +150,7 @@
 			children = (
 				9148F34EBAEB447922365A6A /* iXadrez.app */,
 				08B6B201DB12C2F0D8ABE7DA /* iXadrezTests.xctest */,
+				885C330F29AA7672807BCFF3 /* iXadrezUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -147,6 +172,7 @@
 			children = (
 				6ED157797B4FD66D3F8268E8 /* iXadrez */,
 				342FBC34AD7971A9888DACE7 /* iXadrezTests */,
+				2A0B068BF84B5F64C69FE8E7 /* iXadrezUITests */,
 				C8B98DD2140D7D3F14B1D03B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -154,6 +180,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		52F4C47F1286E215A9E57258 /* iXadrezUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E228844B120A6011F9CDF9F0 /* Build configuration list for PBXNativeTarget "iXadrezUITests" */;
+			buildPhases = (
+				76B6F3C686C9FD72D5BEBFD7 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F03791F9D3998929AC6FAA09 /* PBXTargetDependency */,
+			);
+			name = iXadrezUITests;
+			packageProductDependencies = (
+			);
+			productName = iXadrezUITests;
+			productReference = 885C330F29AA7672807BCFF3 /* iXadrezUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		B29F9A9960F22BA6647C829D /* iXadrez */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BE6DE86816BC07A11687029F /* Build configuration list for PBXNativeTarget "iXadrez" */;
@@ -202,6 +246,10 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					52F4C47F1286E215A9E57258 = {
+						DevelopmentTeam = S769436W24;
+						TestTargetID = B29F9A9960F22BA6647C829D;
+					};
 					B29F9A9960F22BA6647C829D = {
 						DevelopmentTeam = S769436W24;
 						ProvisioningStyle = Automatic;
@@ -230,6 +278,7 @@
 			targets = (
 				B29F9A9960F22BA6647C829D /* iXadrez */,
 				D98F1A870D719C00FABC8DB7 /* iXadrezTests */,
+				52F4C47F1286E215A9E57258 /* iXadrezUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -242,6 +291,7 @@
 				1D392AEB037474F1EF274518 /* Assets.xcassets in Resources */,
 				C075DCB7983950427F4E857E /* GoogleService-Info.plist in Resources */,
 				A1F1032C5373A286B148010E /* OFL.txt in Resources */,
+				47ED8CFACEF1577E7292F458 /* PrivacyInfo.xcprivacy in Resources */,
 				26FC80C9EB5C6614F0891537 /* Sora-Bold.ttf in Resources */,
 				06BB2B536F283725BA6F8B7E /* Sora-ExtraBold.ttf in Resources */,
 				143947C2DB02D555510435F8 /* Sora-Regular.ttf in Resources */,
@@ -256,6 +306,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60CA9F16B9A713FF634B4639 /* ChatModeration.swift in Sources */,
 				D040358F387D299CDAA80C4A /* ChessAI.swift in Sources */,
 				51469F59F6568A05C2130EF3 /* ChessBoardView.swift in Sources */,
 				D1D0081AFC7D015FFE67EA31 /* ChessEngine.swift in Sources */,
@@ -275,6 +326,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		76B6F3C686C9FD72D5BEBFD7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FA5FDC1CF6025E093C68754 /* StoreScreenshots.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BB45B604FCF1921C6F1817F7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -291,9 +350,34 @@
 			target = B29F9A9960F22BA6647C829D /* iXadrez */;
 			targetProxy = B8AA3D8BB27E81DB3588B802 /* PBXContainerItemProxy */;
 		};
+		F03791F9D3998929AC6FAA09 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B29F9A9960F22BA6647C829D /* iXadrez */;
+			targetProxy = 2E30455786DCFC64E598ADDC /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		29A2C728EB4E97ADF41B30A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = S769436W24;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.vidi.iXadrezUITests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = iXadrez;
+			};
+			name = Release;
+		};
 		46F23CF5F3DCFBF36CF2D2B3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -390,6 +474,26 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
+		};
+		D7EB6A8925E43DE52858FF37 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = S769436W24;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.vidi.iXadrezUITests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = iXadrez;
+			};
+			name = Debug;
 		};
 		E3954D28360484D8A9FCC4EE /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -521,6 +625,15 @@
 			buildConfigurations = (
 				E3954D28360484D8A9FCC4EE /* Debug */,
 				C1E052CE2F8167FCD6277AF3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E228844B120A6011F9CDF9F0 /* Build configuration list for PBXNativeTarget "iXadrezUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D7EB6A8925E43DE52858FF37 /* Debug */,
+				29A2C728EB4E97ADF41B30A6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

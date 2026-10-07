@@ -27,20 +27,20 @@ struct MainMenuView: View {
                     .padding(.top, 12)
 
                     LazyVGrid(columns: columns, spacing: 16) {
-                        modeCard(icon: "🧑‍🤝‍🧑", title: loc.t("mode1v1"), desc: loc.t("mode1v1Desc")) {
+                        modeCard(id: "mode-1v1", icon: "🧑‍🤝‍🧑", title: loc.t("mode1v1"), desc: loc.t("mode1v1Desc")) {
                             showDifficulty = false
                             onStart1v1()
                         }
-                        modeCard(icon: "🤖", title: loc.t("modeBot"), desc: loc.t("modeBotDesc")) {
+                        modeCard(id: "mode-bot", icon: "🤖", title: loc.t("modeBot"), desc: loc.t("modeBotDesc")) {
                             withAnimation { showDifficulty = true }
                         }
-                        modeCard(icon: "🎓", title: loc.t("modeTutorial"), desc: loc.t("modeTutorialDesc")) {
+                        modeCard(id: "mode-tutorial", icon: "🎓", title: loc.t("modeTutorial"), desc: loc.t("modeTutorialDesc")) {
                             onOpenTutorial()
                         }
-                        modeCard(icon: "❓", title: loc.t("modeHelp"), desc: loc.t("modeHelpDesc")) {
+                        modeCard(id: "mode-help", icon: "❓", title: loc.t("modeHelp"), desc: loc.t("modeHelpDesc")) {
                             onOpenHelp()
                         }
-                        modeCard(icon: "🌐", title: loc.t("modeMultiplayer"), desc: loc.t("modeMultiplayerDesc")) {
+                        modeCard(id: "mode-multiplayer", icon: "🌐", title: loc.t("modeMultiplayer"), desc: loc.t("modeMultiplayerDesc")) {
                             showDifficulty = false
                             onOpenMultiplayer()
                         }
@@ -58,7 +58,7 @@ struct MainMenuView: View {
         }
     }
 
-    private func modeCard(icon: String, title: String, desc: String, action: @escaping () -> Void) -> some View {
+    private func modeCard(id: String, icon: String, title: String, desc: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             VStack(spacing: 8) {
                 Text(icon).font(Theme.sora(34))
@@ -70,6 +70,7 @@ struct MainMenuView: View {
             .background(RoundedRectangle(cornerRadius: 16).fill(Theme.panel).overlay(RoundedRectangle(cornerRadius: 16).stroke(Theme.panelBorder, lineWidth: 1)))
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(id)
     }
 
     private var difficultyPanel: some View {
@@ -100,5 +101,6 @@ struct MainMenuView: View {
             .background(RoundedRectangle(cornerRadius: 12).fill(Theme.bgSoft).overlay(RoundedRectangle(cornerRadius: 12).stroke(Theme.panelBorder, lineWidth: 1)))
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("level-\(level.rawValue)")
     }
 }

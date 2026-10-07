@@ -35,6 +35,8 @@ final class MultiplayerService: ObservableObject {
     @Published private(set) var chatMessages: [ChatMessage] = []
     /// The opponent's display name; "" until their client sends one.
     @Published private(set) var opponentName: String = ""
+    /// Hides the opponent's chat messages for the rest of this room (rule 1.2: block abusive users).
+    @Published var opponentMuted = false
     /// My display name, sent inside my presence map.
     var myName: String = "" {
         didSet { myName = Self.cleanName(myName) } // assigning inside didSet doesn't re-trigger it
@@ -141,6 +143,7 @@ final class MultiplayerService: ObservableObject {
         sentPlies = []
         finishedNotified = false
         opponentName = ""
+        opponentMuted = false
         sawGuest = guestUid != nil || role == "guest"
         opponentOnline = false
         lastOppPresence = nil
@@ -245,7 +248,7 @@ final class MultiplayerService: ObservableObject {
         lastOppPresence = (role == "host" ? data["guestPresence"] : data["hostPresence"]) as? [String: Any]
         // The name rides inside the presence map (the room's security rules reject new top-level
         // fields). Older clients rewrite presence without it, so keep the last name we saw.
-        let oppName = Self.cleanName(lastOppPresence?["name"] as? String)
+        let oppName = ChatModeration.mask(Self.cleanName(lastOppPresence?["name"] as? String))
         if !oppName.isEmpty, oppName != opponentName { opponentName = oppName }
         recomputePresence()
     }
@@ -305,7 +308,8 @@ final class MultiplayerService: ObservableObject {
                         let d = change.document.data()
                         if self.isStale(d["sentAt"]) { continue }
                         guard let uid = d["uid"] as? String, let text = d["text"] as? String else { continue }
-                        self.chatMessages.append(ChatMessage(uid: uid, text: text, mine: uid == self.myUid))
+                        let mine = uid == self.myUid
+                        self.chatMessages.append(ChatMessage(uid: uid, text: mine ? text : ChatModeration.mask(text), mine: mine))
                     }
                 }
             }
@@ -390,6 +394,7 @@ final class MultiplayerService: ObservableObject {
         roomCreatedAt = .distantPast
         finishedNotified = false
         opponentName = ""
+        opponentMuted = false
         opponentOnline = false
         lastOppPresence = nil
         sawGuest = false

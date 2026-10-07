@@ -40,6 +40,7 @@ struct SplashView: View {
 
                 Button(loc.t("introSkip")) { onDismiss() }
                     .buttonStyle(GhostButtonStyle())
+                    .accessibilityIdentifier("intro-skip")
                     .padding(.top, 10)
 
                 GeometryReader { geo in
