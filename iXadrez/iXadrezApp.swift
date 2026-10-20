@@ -18,7 +18,15 @@ struct iXadrezApp: App {
 }
 
 private enum AppScreen {
-    case menu, game, tutorial, help, multiplayerLobby
+    case menu, game, tutorial, help, multiplayerLobby, coachHome, coachReview
+}
+
+/// The game handed to the Coach: its moves, who the user played, and how to retry a position.
+private struct CoachSource {
+    let records: [MoveRecord]
+    let playerColor: PieceColor?
+    let retryMode: GameMode
+    let level: BotDifficulty
 }
 
 struct ContentView: View {
@@ -26,6 +34,8 @@ struct ContentView: View {
     @StateObject private var vm = GameViewModel()
     @StateObject private var mpVM = MultiplayerViewModel()
     @State private var screen: AppScreen = .menu
+    @State private var coachSource: CoachSource? = nil
+    @State private var coachReturn: AppScreen = .menu
     @State private var showSplash = true
     @State private var soundOn = SoundEngine.shared.isOn
 
@@ -43,10 +53,26 @@ struct ContentView: View {
                             onStartBot: { level in vm.newGame(mode: .bot, level: level); screen = .game },
                             onOpenTutorial: { screen = .tutorial },
                             onOpenHelp: { screen = .help },
-                            onOpenMultiplayer: { screen = .multiplayerLobby }
+                            onOpenMultiplayer: { screen = .multiplayerLobby },
+                            onOpenCoach: { screen = .coachHome }
                         )
                     case .game:
-                        GameView(vm: vm, onBackToMenu: { screen = .menu })
+                        GameView(vm: vm, onBackToMenu: { screen = .menu }, onOpenCoach: openCoachForCurrentGame)
+                    case .coachHome:
+                        CoachHomeView(onOpenReview: openSavedReview, onBack: { screen = .menu })
+                    case .coachReview:
+                        if let source = coachSource {
+                            CoachView(
+                                records: source.records,
+                                playerColor: source.playerColor,
+                                onRetry: { prefix in
+                                    vm.newGame(from: prefix, mode: source.retryMode, level: source.level)
+                                    screen = .game
+                                },
+                                onBack: { screen = coachReturn }
+                            )
+                            .id(CoachStore.encode(source.records))
+                        }
                     case .tutorial:
                         TutorialView(onBackToMenu: { screen = .menu })
                     case .help:
@@ -71,6 +97,27 @@ struct ContentView: View {
             }
         }
         .foregroundColor(Theme.ink)
+    }
+
+    private func openCoachForCurrentGame() {
+        let playerColor: PieceColor? = switch vm.mode {
+        case .bot: GameViewModel.botColor.opponent
+        case .multiplayer: vm.networkColor
+        case .oneVOne: nil
+        }
+        coachSource = CoachSource(records: vm.game.history, playerColor: playerColor,
+                                  retryMode: vm.mode == .bot ? .bot : .oneVOne, level: vm.botLevel)
+        coachReturn = .menu
+        screen = .coachReview
+    }
+
+    private func openSavedReview(_ review: SavedReview) {
+        let playerColor = review.playerColor.flatMap(PieceColor.init(rawValue:))
+        // Retrying as White means facing the bot again; any other side is replayed on one device.
+        coachSource = CoachSource(records: CoachStore.decode(review.moves), playerColor: playerColor,
+                                  retryMode: playerColor == .white ? .bot : .oneVOne, level: vm.botLevel)
+        coachReturn = .coachHome
+        screen = .coachReview
     }
 
     private var header: some View {

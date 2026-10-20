@@ -161,6 +161,43 @@ enum ChessAI {
         return best
     }
 
+    /// Score of `game` from the side to move's point of view, the best move found, and the score of
+    /// every legal move from the same search — the Coach grades a played move against the best one
+    /// within one search, since comparing searches of consecutive positions skews by the horizon.
+    /// Bounded by depth (the time budget is only a safety net) so a review is repeatable.
+    /// Safe to call from a background thread.
+    static func analyse(game: ChessGame, depth: Int = 3, timeBudget: TimeInterval = 6) -> (best: Move?, score: Int, moves: [(move: Move, score: Int)]) {
+        if game.isGameOver {
+            return (nil, game.result == .checkmate ? -mateScore : 0, [])
+        }
+        let colorSign = game.turn == .white ? 1 : -1
+        let deadline = Date().addingTimeInterval(timeBudget)
+        var currentOrder = orderMoves(game.allLegalMoves(for: game.turn), game)
+        var best: (best: Move?, score: Int) = (currentOrder.first, Int.min / 2)
+        var scored: [(move: Move, score: Int)] = []
+        for d in 1...depth {
+            var results: [(move: Move, score: Int)] = []
+            for move in currentOrder {
+                let child = game.clone()
+                child.makeMove(from: move.from, to: move.to, promotion: move.promotion)
+                let score = -negamax(child, depth: d - 1, alpha: Int.min / 2, beta: Int.max / 2, colorSign: -colorSign, useQuiescence: true, deadline: deadline)
+                results.append((move, score))
+                if Date() > deadline { break }
+            }
+            let complete = results.count == currentOrder.count && Date() <= deadline
+            if complete || best.score == Int.min / 2 {
+                results.sort { $0.score > $1.score }
+                currentOrder = results.map { $0.move } + currentOrder.filter { m in !results.contains { $0.move == m } }
+                if let top = results.first { best = (top.move, top.score) }
+                scored = results
+            }
+            if !complete { break }
+        }
+        return (best.best, best.score, scored)
+    }
+
+    static func isMateScore(_ score: Int) -> Bool { abs(score) >= mateScore }
+
     /// Picks a move for the side to move. Safe to call from a background thread.
     static func pickMove(game: ChessGame, difficulty: BotDifficulty) -> Move? {
         let cfg = levels[difficulty]!

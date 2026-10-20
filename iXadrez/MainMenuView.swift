@@ -9,6 +9,7 @@ struct MainMenuView: View {
     var onOpenTutorial: () -> Void
     var onOpenHelp: () -> Void
     var onOpenMultiplayer: () -> Void
+    var onOpenCoach: () -> Void
 
     private let columns = [GridItem(.flexible(), spacing: 16), GridItem(.flexible(), spacing: 16)]
 
@@ -43,6 +44,10 @@ struct MainMenuView: View {
                         modeCard(id: "mode-multiplayer", icon: "🌐", title: loc.t("modeMultiplayer"), desc: loc.t("modeMultiplayerDesc")) {
                             showDifficulty = false
                             onOpenMultiplayer()
+                        }
+                        modeCard(id: "mode-coach", icon: "🧑‍🏫", title: loc.t("modeCoach"), desc: loc.t("modeCoachDesc")) {
+                            showDifficulty = false
+                            onOpenCoach()
                         }
                     }
                 }

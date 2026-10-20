@@ -55,6 +55,20 @@ final class GameViewModel: ObservableObject {
         canRedo = false
     }
 
+    /// Starts a local game from the position reached after `records` — used by the Coach's
+    /// "retry this moment" so a player can try the critical position again.
+    func newGame(from records: [MoveRecord], mode: GameMode, level: BotDifficulty) {
+        newGame(mode: mode, level: level)
+        for record in records {
+            game.makeMove(from: record.from, to: record.to, promotion: record.promotion)
+        }
+        pieces = PieceInstance.fresh(from: game.board)
+        if let last = records.last { lastMove = (last.from, last.to) }
+        if mode == .bot, game.turn == Self.botColor, !game.isGameOver {
+            requestBotMove()
+        }
+    }
+
     var statusText: (over: Bool, key: String, winner: PieceColor?) {
         let s = game.gameStatusText()
         return (s.over, s.key, s.winner)
