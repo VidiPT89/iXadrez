@@ -10,6 +10,7 @@ enum Theme {
     static let gold = Color(red: 0.831, green: 0.686, blue: 0.216)
     static let goldSoft = Color(red: 0.910, green: 0.780, blue: 0.396)
     static let danger = Color(red: 0.753, green: 0.314, blue: 0.247)
+    static let hint = Color(red: 0.310, green: 0.722, blue: 0.588)
     static let squareLight = Color(red: 0.937, green: 0.878, blue: 0.741)
     static let squareLight2 = Color(red: 0.882, green: 0.808, blue: 0.635)
     static let squareDark = Color(red: 0.443, green: 0.302, blue: 0.212)

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04AC68131A8AD74CBB6C9263 /* CoachView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F1B8443B2028852E632E68 /* CoachView.swift */; };
 		06BB2B536F283725BA6F8B7E /* Sora-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4164BBD1286568CEDE31CB33 /* Sora-ExtraBold.ttf */; };
 		0BFE50F22AA18DF0E9CF4B6D /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7256C8980E61889615CD76E9 /* SplashView.swift */; };
 		0EE9C0C9309B44581772883B /* Sora-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63E197FD14DB8AB5233106E5 /* Sora-SemiBold.ttf */; };
@@ -22,7 +23,9 @@
 		6091793E2034EB27BECB9336 /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A18E8588D2A5CAE73A22A8 /* GameViewModel.swift */; };
 		60CA9F16B9A713FF634B4639 /* ChatModeration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40A768372ABB4D8D79E388B /* ChatModeration.swift */; };
 		648EB1B3EF9E0F18AB241066 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120007563972E39D33D16EC9 /* TutorialView.swift */; };
+		68EA1FBB340B8DC2C9A1D847 /* ChessCoachTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37AC180E12C71418D668CA72 /* ChessCoachTests.swift */; };
 		6FD66C12E89D0A4227A3CAE6 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27F9941C19DFE081E56FE49 /* Localization.swift */; };
+		773E92E8725C17DC7134603A /* CoachStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F4396826B88C63865A5038 /* CoachStore.swift */; };
 		7EBDC5E951DE0E1CAD20E252 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB83797392404B944C3FA3DF /* Theme.swift */; };
 		7FA5FDC1CF6025E093C68754 /* StoreScreenshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF7D111829741B9FFA8AD72 /* StoreScreenshots.swift */; };
 		825A6B0A7B94AE1C32D10652 /* MultiplayerLobbyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA281C3B872A022B72F2D27B /* MultiplayerLobbyView.swift */; };
@@ -34,6 +37,8 @@
 		D040358F387D299CDAA80C4A /* ChessAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53749EBDA35DA3FF7607E331 /* ChessAI.swift */; };
 		D1D0081AFC7D015FFE67EA31 /* ChessEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9038AB5C682B7203B812CADE /* ChessEngine.swift */; };
 		EE4E616F554D71DE29F87A91 /* ChessEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4A82C2A0607D34D6A4C92D /* ChessEngineTests.swift */; };
+		F2F0092AA5A30202C0DFA2A6 /* ChessCoach.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4E475DF6888F800F95631 /* ChessCoach.swift */; };
+		FA845D359F86C22D12BA64E0 /* CoachHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD2318728AF0DA6D23AD231 /* CoachHomeView.swift */; };
 		FD3B1AD080518BD13119907C /* iXadrezApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1F4AB7CA5015A0DD50DDAE /* iXadrezApp.swift */; };
 		FDCEAD3A26F9F3095614945F /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA4EE63C9220A8F4240CD7E /* MainMenuView.swift */; };
 /* End PBXBuildFile section */
@@ -57,8 +62,12 @@
 
 /* Begin PBXFileReference section */
 		08B6B201DB12C2F0D8ABE7DA /* iXadrezTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = iXadrezTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		10F4396826B88C63865A5038 /* CoachStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachStore.swift; sourceTree = "<group>"; };
 		120007563972E39D33D16EC9 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
+		18F1B8443B2028852E632E68 /* CoachView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachView.swift; sourceTree = "<group>"; };
+		1CD2318728AF0DA6D23AD231 /* CoachHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachHomeView.swift; sourceTree = "<group>"; };
 		343B944503A26D4075A72B70 /* ChessBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessBoardView.swift; sourceTree = "<group>"; };
+		37AC180E12C71418D668CA72 /* ChessCoachTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessCoachTests.swift; sourceTree = "<group>"; };
 		3B784440F6056C3FEA20210B /* Sora-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sora-Regular.ttf"; sourceTree = "<group>"; };
 		4164BBD1286568CEDE31CB33 /* Sora-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sora-ExtraBold.ttf"; sourceTree = "<group>"; };
 		4D4A82C2A0607D34D6A4C92D /* ChessEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessEngineTests.swift; sourceTree = "<group>"; };
@@ -80,6 +89,7 @@
 		A6A18E8588D2A5CAE73A22A8 /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
 		AA281C3B872A022B72F2D27B /* MultiplayerLobbyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerLobbyView.swift; sourceTree = "<group>"; };
 		BB83797392404B944C3FA3DF /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		C1B4E475DF6888F800F95631 /* ChessCoach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessCoach.swift; sourceTree = "<group>"; };
 		C4186E1FD73CEB9BAD967C12 /* MultiplayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerViewModel.swift; sourceTree = "<group>"; };
 		DBF7D111829741B9FFA8AD72 /* StoreScreenshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreScreenshots.swift; sourceTree = "<group>"; };
 		E40A768372ABB4D8D79E388B /* ChatModeration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModeration.swift; sourceTree = "<group>"; };
@@ -112,6 +122,7 @@
 		342FBC34AD7971A9888DACE7 /* iXadrezTests */ = {
 			isa = PBXGroup;
 			children = (
+				37AC180E12C71418D668CA72 /* ChessCoachTests.swift */,
 				4D4A82C2A0607D34D6A4C92D /* ChessEngineTests.swift */,
 			);
 			path = iXadrezTests;
@@ -124,7 +135,11 @@
 				E40A768372ABB4D8D79E388B /* ChatModeration.swift */,
 				53749EBDA35DA3FF7607E331 /* ChessAI.swift */,
 				343B944503A26D4075A72B70 /* ChessBoardView.swift */,
+				C1B4E475DF6888F800F95631 /* ChessCoach.swift */,
 				9038AB5C682B7203B812CADE /* ChessEngine.swift */,
+				1CD2318728AF0DA6D23AD231 /* CoachHomeView.swift */,
+				10F4396826B88C63865A5038 /* CoachStore.swift */,
+				18F1B8443B2028852E632E68 /* CoachView.swift */,
 				F39A81D67A8BA9828DA62EB2 /* GameView.swift */,
 				A6A18E8588D2A5CAE73A22A8 /* GameViewModel.swift */,
 				8F1C4FCEE3DB730A7A206DCD /* GoogleService-Info.plist */,
@@ -309,7 +324,11 @@
 				60CA9F16B9A713FF634B4639 /* ChatModeration.swift in Sources */,
 				D040358F387D299CDAA80C4A /* ChessAI.swift in Sources */,
 				51469F59F6568A05C2130EF3 /* ChessBoardView.swift in Sources */,
+				F2F0092AA5A30202C0DFA2A6 /* ChessCoach.swift in Sources */,
 				D1D0081AFC7D015FFE67EA31 /* ChessEngine.swift in Sources */,
+				FA845D359F86C22D12BA64E0 /* CoachHomeView.swift in Sources */,
+				773E92E8725C17DC7134603A /* CoachStore.swift in Sources */,
+				04AC68131A8AD74CBB6C9263 /* CoachView.swift in Sources */,
 				202512E2293E68F84B56B697 /* GameView.swift in Sources */,
 				6091793E2034EB27BECB9336 /* GameViewModel.swift in Sources */,
 				2286D8C928D1381E2E76A3B3 /* HelpView.swift in Sources */,
@@ -338,6 +357,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68EA1FBB340B8DC2C9A1D847 /* ChessCoachTests.swift in Sources */,
 				EE4E616F554D71DE29F87A91 /* ChessEngineTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

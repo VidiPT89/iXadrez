@@ -42,6 +42,8 @@ struct ChessBoardView: View {
     var legalTargets: [Move] = []
     var lastMove: (from: Square, to: Square)? = nil
     var checkSquare: Square? = nil
+    /// The Coach's suggested move, outlined in a distinct color from the last move.
+    var hint: (from: Square, to: Square)? = nil
     var flipped: Bool = false
     var onTap: (Square) -> Void = { _ in }
 
@@ -102,6 +104,7 @@ struct ChessBoardView: View {
         let isSelected = selected == sq
         let isLast = lastMove.map { $0.from == sq || $0.to == sq } ?? false
         let isCheck = checkSquare == sq
+        let isHint = hint.map { $0.from == sq || $0.to == sq } ?? false
         let target = legalTargets.first { $0.to == sq }
 
         ZStack {
@@ -114,6 +117,9 @@ struct ChessBoardView: View {
                 Rectangle().stroke(goldColor, lineWidth: 4)
             } else if isCheck {
                 Rectangle().stroke(Theme.danger, lineWidth: 4)
+            } else if isHint {
+                Rectangle().stroke(Theme.hint, lineWidth: 4)
+                Rectangle().fill(Theme.hint.opacity(0.22))
             } else if isLast {
                 Rectangle().stroke(goldColor.opacity(0.5), lineWidth: 4)
             }

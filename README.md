@@ -11,6 +11,7 @@ A versão iOS nativa de [Xadrez para web](https://github.com/VidiPT89/Xadrez). X
 - 🧑‍🤝‍🧑 Modo 1 vs 1 — dois jogadores alternam no mesmo dispositivo
 - 🤖 Modo Contra o Bot com 4 níveis de dificuldade (Iniciante, Fácil, Médio, Difícil), motor minimax com poda alfa-beta, tabelas de posição por peça e pesquisa por tempo limitado no nível Difícil
 - 🧠 O bot pesquisa numa thread de fundo dedicada — nunca bloqueia a interface, mesmo a pensar em profundidade
+- 🧑‍🏫 **Treinador** — no fim de cada partida, o motor revê todos os lances no próprio dispositivo (sem internet), classifica-os (melhor lance, bom, imprecisão, erro, erro grave), explica cada erro em português (peça deixada sem defesa, garfo, mate ou captura falhados) com notação portuguesa (R, D, T, B, C), mostra a verde o lance certo e permite "Repetir este momento" a partir da posição antes do erro. Guarda o histórico das partidas revistas, a precisão média e os padrões de erro que mais se repetem, com uma dica para cada um
 - 🎓 Modo Tutorial com 5 lições interativas: movimentação das peças, regras especiais, princípios de abertura, táticas básicas (garfos, cravos, espetos) e finais básicos
 - ❓ Modo Ajuda com referência rápida de regras, modos de jogo e controlos
 - 🇵🇹 🇬🇧 Alternância de idioma entre Português Europeu e Inglês, guardada entre sessões
@@ -40,6 +41,10 @@ iXadrez/
     ├── ChessBoardView.swift         # Renderização do tabuleiro, partilhada entre jogo e tutorial
     ├── GameView.swift                 # Ecrã de jogo: tabuleiro, painel, promoção, resultado
     ├── MainMenuView.swift              # Menu principal e seletor de dificuldade
+    ├── ChessCoach.swift          # Treinador: classifica cada lance e explica os erros (PT/EN)
+    ├── CoachStore.swift          # Histórico de partidas revistas e progresso
+    ├── CoachView.swift           # Revisão pós-partida
+    ├── CoachHomeView.swift       # Progresso: precisão e padrões de erro
     ├── TutorialView.swift               # 5 lições interativas
     ├── HelpView.swift                    # Referência de regras e controlos
     ├── SplashView.swift                   # Apresentação inicial
@@ -52,7 +57,8 @@ iXadrez/
     ├── GoogleService-Info.plist                   # Configuração do projeto Firebase (ver secção Multijogador)
     └── Assets.xcassets                             # Ícone da app
 └── iXadrezTests/
-    └── ChessEngineTests.swift   # Testes do motor (perft, empates, mate) e do bot
+    ├── ChessEngineTests.swift   # Testes do motor (perft, empates, mate) e do bot
+    └── ChessCoachTests.swift    # Testes do Treinador (classificação, temas, notação)
 ```
 
 ## ⚙️ Game Mechanics

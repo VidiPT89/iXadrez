@@ -17,7 +17,28 @@ final class StoreScreenshots: XCTestCase {
         var app = launch(lang: lang)
         shot(app, "\(lang)-1-menu")
 
-        // 2. A game against the bot, with a piece selected to show its legal moves
+        // 2. The Coach reviewing a game where Black hangs the queen (3...Qg5) and White misses it (4.a3)
+        app.buttons["mode-1v1"].tap()
+        let coachBoard = app.otherElements["chess-board"]
+        XCTAssertTrue(coachBoard.waitForExistence(timeout: 5))
+        for (from, to) in [("e2", "e4"), ("e7", "e5"), ("g1", "f3"), ("d8", "g5"), ("a2", "a3"), ("g5", "d2")] {
+            tap(coachBoard, from); tap(coachBoard, to)
+            usleep(700_000)
+        }
+        app.swipeUp()
+        app.buttons["coach-review"].tap()
+        XCTAssertTrue(app.otherElements["coach-board"].waitForExistence(timeout: 60))
+        app.swipeUp() // bring the Coach's explanation of the blunder into view
+        shot(app, "\(lang)-2-coach")
+
+        // 3. The Coach's progress page, now holding that review
+        app = launch(lang: lang)
+        app.buttons["mode-coach"].tap()
+        sleep(1)
+        shot(app, "\(lang)-3-progress")
+
+        // 4. A game against the bot, with a piece selected to show its legal moves
+        app = launch(lang: lang)
         app.buttons["mode-bot"].tap()
         app.buttons["level-medium"].tap()
         let board = app.otherElements["chess-board"]
@@ -27,30 +48,24 @@ final class StoreScreenshots: XCTestCase {
             sleep(3) // the bot always "thinks" for a moment
         }
         tap(board, "f1")
-        shot(app, "\(lang)-2-game")
+        shot(app, "\(lang)-4-game")
 
-        // 3. Tutorial, with the knight's moves highlighted
+        // 5. Tutorial, with the knight's moves highlighted
         app = launch(lang: lang)
         app.buttons["mode-tutorial"].tap()
         let lessonBoard = app.otherElements["chess-board"]
         XCTAssertTrue(lessonBoard.waitForExistence(timeout: 5))
         tap(lessonBoard, "d4")
-        shot(app, "\(lang)-3-tutorial")
+        shot(app, "\(lang)-5-tutorial")
 
-        // 4. Multiplayer lobby
+        // 6. Multiplayer lobby
         app = launch(lang: lang)
         app.buttons["mode-multiplayer"].tap()
         let name = app.textFields["mp-name"]
         XCTAssertTrue(name.waitForExistence(timeout: 5))
         name.tap()
         name.typeText((lang == "pt" ? "Vidi" : "Alex") + "\n") // return dismisses the keyboard
-        shot(app, "\(lang)-4-multiplayer")
-
-        // 5. Help
-        app = launch(lang: lang)
-        app.buttons["mode-help"].tap()
-        sleep(1)
-        shot(app, "\(lang)-5-help")
+        shot(app, "\(lang)-6-multiplayer")
     }
 
     private func launch(lang: String) -> XCUIApplication {

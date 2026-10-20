@@ -9,6 +9,19 @@ struct GameView: View {
     @State private var showReportConfirm = false
     @Environment(\.openURL) private var openURL
     var onBackToMenu: () -> Void
+    var onOpenCoach: () -> Void = {}
+
+    /// Local games can be reviewed at any point; an online game only once it has ended.
+    private var canReview: Bool {
+        vm.game.history.count >= 2 && (vm.mode != .multiplayer || vm.statusText.over || vm.multiplayerResult != nil)
+    }
+
+    private func openCoach() {
+        vm.showResult = false
+        vm.multiplayerResult = nil
+        if vm.mode == .multiplayer { mp.leaveRoom() }
+        onOpenCoach()
+    }
 
     var body: some View {
         ScrollView {
@@ -47,6 +60,13 @@ struct GameView: View {
                             .buttonStyle(GhostButtonStyle())
                             .disabled(vm.thinking || !vm.canRedo)
                     }
+                }
+
+                if canReview {
+                    Button(loc.t("coachReview")) { openCoach() }
+                        .buttonStyle(GhostButtonStyle())
+                        .disabled(vm.thinking)
+                        .accessibilityIdentifier("coach-review")
                 }
 
                 if vm.mode == .multiplayer {
@@ -206,7 +226,7 @@ struct GameView: View {
                     ForEach(0..<((history.count + 1) / 2), id: \.self) { i in
                         let white = history[i * 2]
                         let black = i * 2 + 1 < history.count ? history[i * 2 + 1] : nil
-                        Text("\(i + 1). \(white.san)\(black != nil ? "   " + black!.san : "")")
+                        Text("\(i + 1). \(sanText(white.san, loc.language))\(black != nil ? "   " + sanText(black!.san, loc.language) : "")")
                             .font(.system(.footnote, design: .monospaced))
                             .foregroundColor(Theme.ink)
                     }
@@ -274,6 +294,9 @@ struct GameView: View {
                 .font(Theme.sora(22, weight: .bold)).foregroundColor(Theme.goldSoft)
             Text(iWon ? loc.t("resultOpponentResignedText") : loc.t("resultYouResignedText"))
                 .font(Theme.sora(15)).foregroundColor(Theme.inkDim).multilineTextAlignment(.center)
+            if vm.game.history.count >= 2 {
+                Button(loc.t("coachReview")) { openCoach() }.buttonStyle(GhostButtonStyle())
+            }
             Button(loc.t("backToMenu")) {
                 vm.multiplayerResult = nil
                 mp.leaveRoom()
@@ -281,7 +304,7 @@ struct GameView: View {
             }.buttonStyle(GhostButtonStyle())
         }
         .padding(32)
-        .presentationDetents([.height(280)])
+        .presentationDetents([.height(340)])
     }
 
     // MARK: Result sheet
@@ -309,6 +332,11 @@ struct GameView: View {
             Text(icon).font(Theme.sora(44))
             Text(title).font(Theme.sora(22, weight: .bold)).foregroundColor(Theme.goldSoft)
             Text(text).font(Theme.sora(15)).foregroundColor(Theme.inkDim).multilineTextAlignment(.center)
+            if vm.game.history.count >= 2 {
+                Button(loc.t("coachReview")) { openCoach() }
+                    .buttonStyle(GhostButtonStyle())
+                    .accessibilityIdentifier("result-coach-review")
+            }
             HStack(spacing: 10) {
                 // An online match can't be restarted in place — the room is over.
                 if vm.mode != .multiplayer {
@@ -322,6 +350,6 @@ struct GameView: View {
             }
         }
         .padding(32)
-        .presentationDetents([.height(280)])
+        .presentationDetents([.height(340)])
     }
 }
