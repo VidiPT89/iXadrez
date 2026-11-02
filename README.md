@@ -18,7 +18,7 @@ A versão iOS nativa de [Xadrez para web](https://github.com/VidiPT89/Xadrez). X
 - 🔊 Efeitos sonoros sintetizados em tempo real via `AVAudioEngine` para lances, capturas, xeque e fim de jogo
 - 🎬 Splash de abertura animado com apresentação da app, que desaparece automaticamente
 - 🖼️ Tabuleiro totalmente adaptável (iPhone e iPad, portrait e landscape), com destaque de lances legais, última jogada e xeque
-- 🌐 Modo Multijogador — joga online com um amigo: Jogo Rápido (sem código), sala com código de 6 caracteres ou link de convite, nome de jogador, chat em tempo real, indicador de presença do adversário e desistência (compatível com a versão web e Android)
+- 🌐 Modo Multijogador — joga online com um amigo: Jogo Rápido (sem código), sala com código de 6 caracteres ou link de convite, nome de jogador, chat em tempo real, indicador de presença do adversário e desistência (compatível com a versão web)
 
 ## 🛠️ Tech Stack
 
