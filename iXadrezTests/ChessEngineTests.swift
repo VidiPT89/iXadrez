@@ -3,7 +3,7 @@ import XCTest
 
 /// Perft counts every legal move tree to a fixed depth from well-known positions and compares
 /// against published totals — it catches castling, en passant, promotion and pin bugs at once.
-/// The same positions are checked by the web (tests/engine.test.js) and Android ports.
+/// The same positions are checked by the web port (tests/engine.test.js).
 final class ChessEngineTests: XCTestCase {
     private func sq(_ s: String) -> Square {
         let chars = Array(s)
